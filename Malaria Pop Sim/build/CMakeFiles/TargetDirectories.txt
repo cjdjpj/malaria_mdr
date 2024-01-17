@@ -1,0 +1,3 @@
+/Users/cjdjpj/Documents/programming/Projects/Malaria Pop Sim/build/CMakeFiles/MalariaPopSim.dir
+/Users/cjdjpj/Documents/programming/Projects/Malaria Pop Sim/build/CMakeFiles/edit_cache.dir
+/Users/cjdjpj/Documents/programming/Projects/Malaria Pop Sim/build/CMakeFiles/rebuild_cache.dir
