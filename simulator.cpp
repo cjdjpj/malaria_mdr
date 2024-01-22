@@ -1,10 +1,10 @@
-#include <iostream>
-
 #include "file_writer.h"
 #include "utils.h"
 #include "settings.h"
 #include "host.h"
 #include "simulator.h"
+
+#include <iostream>
 
 int main(){
 
@@ -17,9 +17,10 @@ int main(){
 	Host::g_clones.insert(5);
 	Host::g_clones.insert(82);
 	Host::g_clones.insert(91);
-	Host::g_freqs[5] = 0.3333333;
-	Host::g_freqs[82] = 0.3333333;
-	Host::g_freqs[91] = 0.3333333;
+	Host::g_freqs[5] = 1.0/3;
+	Host::g_freqs[82] = 1.0/3;
+	Host::g_freqs[91] = 1.0/3;
+
 
 	//begin sim
 	while(generation--){
@@ -67,21 +68,21 @@ int main(){
 
 		//*****mutation***** 
 
-		// std::vector<uint8_t> to_be_added_mutants;
-		// for(const auto& c: Host::g_clones){
-		// 	int num_mutants = (NUM_LOCI-std::popcount(c));
-		// 	for(int i=0; i<NUM_LOCI; i++){
-		// 		int current_bit = (uint8_t)pow(2, i);
-		// 		if(!(current_bit&c)){
-		// 			Host::g_freqs[(c+current_bit)] = Host::g_freqs[c] * LAMBDA;
-		// 			to_be_added_mutants.push_back((c+current_bit));	
-		// 		}
-		// 	}
-		// 	Host::g_freqs[c] -= Host::g_freqs[c] * LAMBDA * num_mutants;
-		// }
-		// for(const auto& c : to_be_added_mutants){
-		// 	 Host::g_clones.insert(c);
-		// }
+		std::vector<uint8_t> to_be_added_mutants;
+		for(const auto& c: Host::g_clones){
+			int num_mutants = (NUM_LOCI-std::popcount(c));
+			for(int i=0; i<NUM_LOCI; i++){
+				int current_bit = (uint8_t)pow(2, i);
+				if(!(current_bit&c)){
+					Host::g_freqs[(c+current_bit)] += Host::g_freqs[c] * LAMBDA;
+					to_be_added_mutants.push_back((c+current_bit));	
+				}
+			}
+			Host::g_freqs[c] = Host::g_freqs[c] -  (Host::g_freqs[c] * LAMBDA * num_mutants);
+		}
+		for(const auto& c : to_be_added_mutants){
+			 Host::g_clones.insert(c);
+		}
 
 		//find new poisson mean
 		poisson_mean = R_NAUGHT * ((double)num_infected/NUM_HOSTS) * (1-((double)num_infected/NUM_HOSTS));
@@ -91,6 +92,9 @@ int main(){
 		// std::cout << "GEN " << GENERATIONS - generation<< "\n";
 		// std::cout << "GLOBAL_ALLELE_FREQUENCIES\n\n";
 		// for(const auto& c: Host::g_clones){
+		// 	if(are_same(Host::g_freqs[c],0)){
+		// 		continue;
+		// 	}
 		// 	std::cout << "clone_" << (int)c << ": " << Host::g_freqs[c] << "\n";
 		// }
 		// 	// print host summaries
@@ -99,6 +103,7 @@ int main(){
 		// for(int i=0; i<NUM_HOSTS; i++){
 		// 	host_population[i].print_summary();
 		// }
+
 		// 	print mean moi
 		std::cout << "\npoisson_mean: " << poisson_mean << "\n";
 		std::cout << "num_infected: " << num_infected << "\n";

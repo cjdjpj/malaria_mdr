@@ -36,6 +36,9 @@ void Host::reset(){
 void Host::print_summary(){
 	std::cout << (unsigned)moi << "\n";
 	for (const auto& c: i_clones) {
+		if(are_same(i_freqs[c], 0)){
+			continue;
+		}
 	    std::cout << "\t" <<"c_" << (int)c << " freq = " << i_freqs[c] << "\n";
 	}
 }
