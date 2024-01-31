@@ -15,11 +15,11 @@ int main(){
 	//set initial conditions (could use yaml or smth)	
 	poisson_mean = STARTING_POISSON_MEAN;
 	Host::g_clones.insert(5);
-	Host::g_clones.insert(82);
-	Host::g_clones.insert(91);
+	Host::g_clones.insert(35);
+	Host::g_clones.insert(21);
 	Host::g_freqs[5] = 1.0/3;
-	Host::g_freqs[82] = 1.0/3;
-	Host::g_freqs[91] = 1.0/3;
+	Host::g_freqs[35] = 1.0/3;
+	Host::g_freqs[21] = 1.0/3;
 
 
 	//begin sim
@@ -38,27 +38,26 @@ int main(){
 
 			//generate indices_for_diceroll (reformat necessary as Host::g_freqs don't go 0->1->2->...)
 			int indices_for_diceroll[Host::g_clones.size()];
-			double shifted_clone_freq[Host::g_clones.size()];
 			int k=0;
 			for (const auto& c: Host::g_clones) {
 			    indices_for_diceroll[k] = c;
-			    shifted_clone_freq[k] = Host::g_freqs[c];
 			    k++;
 			}
 
 			host_population[i].select_clones(Host::g_freqs, Host::g_clones.size(), indices_for_diceroll);
+			host_population[i].recombine();
 		}
 
 
 		//*****census*****
-		//set Host::g_freqs to 0
-		for(const auto& c: Host::g_clones){
-			Host::g_freqs[c] = 0.0;
-		}
+		//clear g_clones and g_freqs
+		std::fill(Host::g_freqs, Host::g_freqs+NUM_UNIQUE_CLONES, 0.0);
+		Host::g_clones.clear();
 		
 		//find average clone freqs
 		for(int i=0; i<NUM_HOSTS; i++){
 			for (const auto& c: host_population[i].i_clones) {
+				Host::g_clones.insert(c);
 			    Host::g_freqs[c] += host_population[i].i_freqs[c];
 			}
 		}
@@ -67,7 +66,6 @@ int main(){
 		}
 
 		//*****mutation***** 
-
 		std::vector<uint8_t> to_be_added_mutants;
 		for(const auto& c: Host::g_clones){
 			int num_mutants = (NUM_LOCI-std::popcount(c));
@@ -85,26 +83,28 @@ int main(){
 		}
 
 		//find new poisson mean
-		poisson_mean = R_NAUGHT * ((double)num_infected/NUM_HOSTS) * (1-((double)num_infected/NUM_HOSTS));
+		poisson_mean = R_NAUGHT * ((long double)num_infected/NUM_HOSTS) * (1-((long double)num_infected/NUM_HOSTS));
 		
-		// //*****debugging*****
-		// 	// print global allele freqs
+		//********************debugging********************//
+
+		// print global allele freqs
 		// std::cout << "GEN " << GENERATIONS - generation<< "\n";
 		// std::cout << "GLOBAL_ALLELE_FREQUENCIES\n\n";
 		// for(const auto& c: Host::g_clones){
-		// 	if(are_same(Host::g_freqs[c],0)){
+		// 	if(are_same(Host::g_freqs[c],0) || Host::g_freqs[c] != Host::g_freqs[c]){
 		// 		continue;
 		// 	}
 		// 	std::cout << "clone_" << (int)c << ": " << Host::g_freqs[c] << "\n";
 		// }
-		// 	// print host summaries
+
+		// print host summaries
 		// std::cout << "\nHOST_SUMMARIES\n\n";
 		// std::cout << "MOI\n";
 		// for(int i=0; i<NUM_HOSTS; i++){
 		// 	host_population[i].print_summary();
 		// }
 
-		// 	print mean moi
+		// print mean moi
 		std::cout << "\npoisson_mean: " << poisson_mean << "\n";
 		std::cout << "num_infected: " << num_infected << "\n";
 

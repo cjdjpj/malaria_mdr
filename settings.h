@@ -2,14 +2,14 @@
 
 #define STARTING_POISSON_MEAN 1.5
 
-#define R_NAUGHT 2
+#define R_NAUGHT 3
 
 #define NUM_HOSTS 10000
 
-#define NUM_LOCI 8
+#define NUM_LOCI 6
 
 #define LAMBDA 0.001 //mutation rate
 
-#define NUM_UNIQUE_CLONES 256 //2^8 = 256
+#define NUM_UNIQUE_CLONES 64 //2^6 = 64
 
-#define GENERATIONS 10
+#define GENERATIONS 100
