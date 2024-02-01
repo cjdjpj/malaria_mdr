@@ -17,9 +17,13 @@ int main(){
 	Host::g_clones.insert(5);
 	Host::g_clones.insert(35);
 	Host::g_clones.insert(21);
-	Host::g_freqs[5] = 1.0/3;
-	Host::g_freqs[35] = 1.0/3;
-	Host::g_freqs[21] = 1.0/3;
+	Host::g_clones.insert(19);
+	Host::g_clones.insert(2);
+	Host::g_freqs[5] = 1.0/5;
+	Host::g_freqs[35] = 1.0/5;
+	Host::g_freqs[21] = 1.0/5;
+	Host::g_freqs[19] = 1.0/5;
+	Host::g_freqs[2] = 1.0/5;
 
 
 	//begin sim
@@ -53,7 +57,7 @@ int main(){
 		//clear g_clones and g_freqs
 		std::fill(Host::g_freqs, Host::g_freqs+NUM_UNIQUE_CLONES, 0.0);
 		Host::g_clones.clear();
-		
+
 		//find average clone freqs
 		for(int i=0; i<NUM_HOSTS; i++){
 			for (const auto& c: host_population[i].i_clones) {
@@ -84,26 +88,27 @@ int main(){
 		
 		//********************debugging********************//
 
-		// print global allele freqs
-		// std::cout << "GEN " << GENERATIONS - generation<< "\n";
-		// std::cout << "GLOBAL_ALLELE_FREQUENCIES\n\n";
+		// //print global allele freqs
+		// std::cout << "\nGEN " << GENERATIONS - generation<< "\n";
+		// std::cout << "-------GLOBAL_ALLELE_FREQUENCIES-------\n";
 		// for(const auto& c: Host::g_clones){
 		// 	if(are_same(Host::g_freqs[c],0) || Host::g_freqs[c] != Host::g_freqs[c]){
 		// 		continue;
 		// 	}
 		// 	std::cout << "clone_" << (int)c << ": " << Host::g_freqs[c] << "\n";
 		// }
+		std::cout << Host::g_clones.size() << " total clones\n\n";
 
-		// print host summaries
-		// std::cout << "\nHOST_SUMMARIES\n\n";
+		// // print host summaries
+		// std::cout << "\n-------HOST_SUMMARIES-------\n\n";
 		// std::cout << "MOI\n";
 		// for(int i=0; i<NUM_HOSTS; i++){
 		// 	host_population[i].print_summary();
 		// }
 
-		// print mean moi
-		std::cout << "\npoisson_mean: " << poisson_mean << "\n";
-		std::cout << "num_infected: " << num_infected << "\n";
+		// // print mean moi
+		// std::cout << "\npoisson_mean: " << poisson_mean << "\n";
+		// std::cout << "num_infected: " << num_infected << "\n";
 
 	}
 	delete[] host_population;

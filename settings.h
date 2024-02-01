@@ -4,7 +4,7 @@
 
 #define R_NAUGHT 3
 
-#define NUM_HOSTS 10000
+#define NUM_HOSTS 100
 
 #define NUM_LOCI 6
 
