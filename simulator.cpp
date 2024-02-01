@@ -66,20 +66,17 @@ int main(){
 		}
 
 		//*****mutation***** 
-		std::vector<uint8_t> to_be_added_mutants;
-		for(const auto& c: Host::g_clones){
+		for(auto it = Host::g_clones.begin(); it != Host::g_clones.end(); ++it){
+			uint8_t c = *it;
 			int num_mutants = (NUM_LOCI-std::popcount(c));
 			for(int i=0; i<NUM_LOCI; i++){
 				int current_bit = (uint8_t)pow(2, i);
 				if(!(current_bit&c)){
 					Host::g_freqs[(c+current_bit)] += Host::g_freqs[c] * LAMBDA;
-					to_be_added_mutants.push_back((c+current_bit));	
+					Host::g_clones.insert((c+current_bit));
 				}
 			}
 			Host::g_freqs[c] = Host::g_freqs[c] -  (Host::g_freqs[c] * LAMBDA * num_mutants);
-		}
-		for(const auto& c : to_be_added_mutants){
-			 Host::g_clones.insert(c);
 		}
 
 		//find new poisson mean
