@@ -1,4 +1,4 @@
-#include "file_writer.h"
+#include "file_readwrite.h"
 #include "utils.h"
 #include "settings.h"
 #include "host.h"
@@ -25,6 +25,9 @@ int main(){
 	Host::g_freqs[19] = 1.0/5;
 	Host::g_freqs[2] = 1.0/5;
 
+	//Read fitness values
+	long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS] = {};
+	read_csv_to_2d_array("../data/fitness_values.csv", clone_drug_fitness);
 
 	//begin sim
 	while(generation--){
@@ -49,6 +52,9 @@ int main(){
 			}
 
 			host_population[i].select_clones(Host::g_freqs, Host::g_clones.size(), indices_for_diceroll);
+
+			host_population[i].select();
+
 			host_population[i].recombine();
 		}
 

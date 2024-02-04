@@ -26,10 +26,17 @@ void Host::select_clones(long double global_frequencies[], int total_clones, int
 	}
 }
 
+void Host::select(){
+	long double W;
+	for(const auto& c: i_clones){
+
+	}
+}
+
 void Host::recombine(){
 	//determine recombinants
 	std::unordered_set<uint8_t> recombinants;
-	for (auto it1 = Host::i_clones.begin(); it1 != Host::i_clones.end(); ++it1) {
+	for(auto it1 = Host::i_clones.begin(); it1 != Host::i_clones.end(); ++it1) {
 	    auto it2 = it1;
 	    ++it2;  
 	    for (; it2 != Host::i_clones.end(); ++it2) {
@@ -79,7 +86,7 @@ void Host::reset(){
 
 void Host::print_summary(){
 	std::cout << (unsigned)moi << "\n";
-	for (const auto& c: i_clones) {
+	for(const auto& c: i_clones) {
 		if(are_same(i_freqs[c], 0)){
 			continue;
 		}
