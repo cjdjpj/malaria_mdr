@@ -17,7 +17,6 @@ public:
 
 	void select_clones(long double frequencies[], int total_clones, int indices_for_diceroll[]);
 	void recombine();
-	void select();
 	void reset();
 	void print_summary();
 };

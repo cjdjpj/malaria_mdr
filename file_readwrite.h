@@ -3,18 +3,7 @@
 #include <sstream>
 #include "settings.h"
 
-template<typename T>
-void write_array_to_txt(T arr, int generations, std::string header, std::string file_name){
-	std::ofstream out;
-	out.open(file_name);
-	out << header << std::endl;
-	for(int i=0; i<generations; i++){
-		out << arr[i] << std::endl;
-	}
-	out.close();
-}
-
-void read_csv_to_2d_array(const std::string& file_path, long double (&data)[NUM_UNIQUE_CLONES][NUM_DRUGS]) {
+void read_csv_to_2d_array_drug(const std::string& file_path, long double (&data)[NUM_UNIQUE_CLONES][NUM_DRUGS]) {
     std::ifstream file(file_path);
 
     std::string line;
@@ -27,5 +16,23 @@ void read_csv_to_2d_array(const std::string& file_path, long double (&data)[NUM_
             data[row][col++] = std::stod(cell);
         }
         ++row;
+    }
+}
+
+void write_2d_array_to_csv_clonefreq(const std::string& file_path, long double (&data)[GENERATIONS][NUM_UNIQUE_CLONES]) {
+    std::ofstream file(file_path);
+    
+    if (!file.is_open()) {
+        throw std::runtime_error("Could not open file for writing");
+    }
+
+    for (int row = 0; row < GENERATIONS; ++row) {
+        for (int col = 0; col < NUM_UNIQUE_CLONES; ++col) {
+            file << std::setprecision(17) << data[row][col];
+            if (col != NUM_UNIQUE_CLONES - 1) {
+                file << ",";
+            }
+        }
+        file << std::endl;
     }
 }

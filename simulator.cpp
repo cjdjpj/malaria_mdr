@@ -8,9 +8,16 @@
 
 int main(){
 
-	//Initialize hosts and set generations
+	//initialize hosts and set generations
 	int generation = GENERATIONS;
 	Host* host_population = new Host[NUM_HOSTS];
+
+	//read in drug-clone fitness values
+	long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS] = {};
+	read_csv_to_2d_array_drug("../data/fitness_values.csv", clone_drug_fitness);
+
+	//set up data collection arrays
+	long double GENERATIONAL_g_freqs[GENERATIONS][NUM_UNIQUE_CLONES] = {};
 
 	//set initial conditions (could use yaml or smth)	
 	poisson_mean = STARTING_POISSON_MEAN;
@@ -24,10 +31,12 @@ int main(){
 	Host::g_freqs[21] = 1.0/5;
 	Host::g_freqs[19] = 1.0/5;
 	Host::g_freqs[2] = 1.0/5;
+	GENERATIONAL_g_freqs[0][5] = 1.0/5;
+	GENERATIONAL_g_freqs[0][35] = 1.0/5;
+	GENERATIONAL_g_freqs[0][21] = 1.0/5;
+	GENERATIONAL_g_freqs[0][19] = 1.0/5;
+	GENERATIONAL_g_freqs[0][2] = 1.0/5;
 
-	//Read fitness values
-	long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS] = {};
-	read_csv_to_2d_array("../data/fitness_values.csv", clone_drug_fitness);
 
 	//begin sim
 	while(generation--){
@@ -53,7 +62,7 @@ int main(){
 
 			host_population[i].select_clones(Host::g_freqs, Host::g_clones.size(), indices_for_diceroll);
 
-			host_population[i].select();
+			// host_population[i].select();
 
 			host_population[i].recombine();
 		}
@@ -73,6 +82,11 @@ int main(){
 		}
 		for(const auto& c: Host::g_clones){
 			Host::g_freqs[c] = Host::g_freqs[c]/num_infected;
+		}
+
+		//record data for export
+		for(int i=0; i<NUM_UNIQUE_CLONES; i++){
+			GENERATIONAL_g_freqs[GENERATIONS - generation][i] = Host::g_freqs[i];
 		}
 
 		//*****mutation***** 
@@ -103,7 +117,7 @@ int main(){
 		// 	}
 		// 	std::cout << "clone_" << (int)c << ": " << Host::g_freqs[c] << "\n";
 		// }
-		std::cout << Host::g_clones.size() << " total clones\n\n";
+		// std::cout << Host::g_clones.size() << " total clones\n\n";
 
 		// // print host summaries
 		// std::cout << "\n-------HOST_SUMMARIES-------\n\n";
@@ -117,5 +131,9 @@ int main(){
 		// std::cout << "num_infected: " << num_infected << "\n";
 
 	}
+	//export data
+	write_2d_array_to_csv_clonefreq("../data/g_freqs.csv",GENERATIONAL_g_freqs);
+
+	//cleanup
 	delete[] host_population;
 }

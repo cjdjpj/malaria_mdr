@@ -26,12 +26,6 @@ void Host::select_clones(long double global_frequencies[], int total_clones, int
 	}
 }
 
-void Host::select(){
-	long double W;
-	for(const auto& c: i_clones){
-
-	}
-}
 
 void Host::recombine(){
 	//determine recombinants
