@@ -41,7 +41,7 @@ int main(){
 	//begin sim
 	while(generation--){
 		
-		//*****for hosts: select moi (poisson dist), choose clones (multinomial), set clone freq (uniform)*****
+		//*****for hosts: transmission, drug distribution, selection, recombination*****
 		poisson_generator.reset();
 		poisson_generator.param(std::poisson_distribution<>::param_type(poisson_mean));
 		num_infected = 0;
@@ -60,9 +60,11 @@ int main(){
 			    k++;
 			}
 
-			host_population[i].select_clones(Host::g_freqs, Host::g_clones.size(), indices_for_diceroll);
+			host_population[i].choose_clones(Host::g_freqs, Host::g_clones.size(), indices_for_diceroll);
 
-			// host_population[i].select();
+			host_population[i].choose_drugs();
+
+			host_population[i].naturally_select(clone_drug_fitness);
 
 			host_population[i].recombine();
 		}
@@ -73,15 +75,16 @@ int main(){
 		std::fill(Host::g_freqs, Host::g_freqs+NUM_UNIQUE_CLONES, 0.0);
 		Host::g_clones.clear();
 
-		//find average clone freqs
+		//find average (weighted) clone freqs
+		long double total_fitness = 0.0;
+		for(int i=0; i<NUM_HOSTS; i++){
+			total_fitness += host_population[i].fitness;
+		}
 		for(int i=0; i<NUM_HOSTS; i++){
 			for (const auto& c: host_population[i].i_clones) {
 				Host::g_clones.insert(c);
-			    Host::g_freqs[c] += host_population[i].i_freqs[c];
+			    Host::g_freqs[c] += host_population[i].i_freqs[c] * (host_population[i].fitness / total_fitness);
 			}
-		}
-		for(const auto& c: Host::g_clones){
-			Host::g_freqs[c] = Host::g_freqs[c]/num_infected;
 		}
 
 		//record data for export
@@ -109,7 +112,7 @@ int main(){
 		//********************debugging********************//
 
 		// //print global allele freqs
-		// std::cout << "\nGEN " << GENERATIONS - generation<< "\n";
+		std::cout << "\nGEN " << GENERATIONS - generation<< "\n";
 		// std::cout << "-------GLOBAL_ALLELE_FREQUENCIES-------\n";
 		// for(const auto& c: Host::g_clones){
 		// 	if(are_same(Host::g_freqs[c],0) || Host::g_freqs[c] != Host::g_freqs[c]){

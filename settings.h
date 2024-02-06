@@ -12,6 +12,6 @@
 
 #define NUM_DRUGS 10
 
-#define GENERATIONS 10000
+#define GENERATIONS 100
 
-#define NUM_HOSTS 100
+#define NUM_HOSTS 100000

@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the CSV file
-csv_file_path = '/Users/cjdjpj/Documents/programming/Projects/malaria_proj/data/g_freqs.csv'
+csv_file_path = '../data/g_freqs.csv'
 data = pd.read_csv(csv_file_path)
 
 # Resetting the index so that we have a column representing the generation number
