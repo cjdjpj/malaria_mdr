@@ -78,7 +78,9 @@ int main(){
 		//find average (weighted) clone freqs
 		long double total_fitness = 0.0;
 		for(int i=0; i<NUM_HOSTS; i++){
-			total_fitness += host_population[i].fitness;
+			if(host_population[i].moi){ //only add fitnesses of infected individuals
+				total_fitness += host_population[i].fitness;
+			}
 		}
 		for(int i=0; i<NUM_HOSTS; i++){
 			for (const auto& c: host_population[i].i_clones) {
