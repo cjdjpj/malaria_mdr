@@ -13,10 +13,6 @@ public:
 	std::unordered_set<uint8_t> i_clones;
 	long double i_freqs[NUM_UNIQUE_CLONES];
 
-	// storing clones and clone freqs for POPULATION
-	static std::unordered_set<uint8_t> g_clones;
-	static long double g_freqs[NUM_UNIQUE_CLONES];
-
 	void choose_clones(long double frequencies[], int total_clones, int indices_for_diceroll[]); 
 	void choose_drugs();
 	void recombine();

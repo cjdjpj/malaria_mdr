@@ -14,15 +14,15 @@ plt.figure(figsize=(20, 10))
 
 # Plot each column (pathogen) as a separate line, with transparency and proper labeling
 for i, column in enumerate(data.columns[1:], start=1):  # Skipping the 'Generation' column, start numbering from 1
-    plt.plot(data['Generation'], data[column], label=f'Series {i}', alpha=0.6)  # Slight transparency, label with series number
+    plt.plot(data['Generation'], data[column], label=f'Clone_{i}', alpha=0.6)  # Label with clone number
 
 # Add labels and title
 plt.xlabel('Generation')
 plt.ylabel('Global Frequency')
-plt.title('Global Frequency of Malaria Clones Over Generations')
+plt.title('Global Frequency of Malaria Clones Over Generations (recombination on)')
 
 # Adjust legend position and size
-plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1.02), fontsize='small', ncol=2)
+plt.legend(loc='upper right', bbox_to_anchor=(1.0, 1.02), fontsize='small', ncol=2)
 
 # Add grid for better readability
 plt.grid(True)

@@ -4,12 +4,9 @@
 
 #include <iostream>
 
-long double Host::g_freqs[NUM_UNIQUE_CLONES] = {};
-std::unordered_set<uint8_t> Host::g_clones = {};
-
 Host::Host(){
 	moi = 0;
-	fitness = 1.0; //default is 1.0 such that selection can be turned off and sim still works.
+	fitness = 1.0; 
 	std::unordered_set<uint8_t> i_clones = {};
 	long double i_freqs[NUM_UNIQUE_CLONES] = {};
 }
@@ -74,7 +71,6 @@ void Host::recombine(){
 
     //determine new recombinant frequencies 
     for(const auto& recombinant : recombinants){
-    	Host::g_clones.insert(recombinant);
     	Host::i_clones.insert(recombinant);
     	long double product = 1.0;
     	for(int i=0; i<NUM_LOCI; i++){

@@ -19,14 +19,14 @@ void read_csv_to_2d_array_drug(const std::string& file_path, long double (&data)
     }
 }
 
-void write_2d_array_to_csv_clonefreq(const std::string& file_path, long double (&data)[GENERATIONS][NUM_UNIQUE_CLONES]) {
+void write_2d_array_to_csv_clonefreq(const std::string& file_path, long double (&data)[NUM_GENERATIONS][NUM_UNIQUE_CLONES]) {
     std::ofstream file(file_path);
     
     if (!file.is_open()) {
         throw std::runtime_error("Could not open file for writing");
     }
 
-    for (int row = 0; row < GENERATIONS; ++row) {
+    for (int row = 0; row < NUM_GENERATIONS; ++row) {
         for (int col = 0; col < NUM_UNIQUE_CLONES; ++col) {
             file << std::setprecision(17) << data[row][col];
             if (col != NUM_UNIQUE_CLONES - 1) {
