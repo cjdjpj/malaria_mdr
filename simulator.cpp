@@ -102,27 +102,35 @@ int main(){
 		
 		//********************debugging********************//
 
-		// //print global allele freqs
+		//print global allele freqs
 		std::cout << "\nGEN " << gen << "\n";
-		// std::cout << "-------GLOBAL_ALLELE_FREQUENCIES-------\n";
-		// for(const auto& c: g_clones){
-		// 	if(are_same(generational_g_freqs[gen][c],0) || generational_g_freqs[gen][c] != generational_g_freqs[gen][c]){
-		// 		continue;
-		// 	}
-		// 	std::cout << "clone_" << (int)c << ": " << generational_g_freqs[gen][c] << "\n";
-		// }
-		// std::cout << g_clones.size() << " total clones\n\n";
 
-		// // print host summaries
-		// std::cout << "\n-------HOST_SUMMARIES-------\n\n";
-		// std::cout << "MOI\n";
-		// for(int i=0; i<NUM_HOSTS; i++){
-		// 	host_population[i].print_summary();
-		// }
+		//PRINT GLOBAL ALLELE FREQUENCIES
+		#ifdef DEBUG_G_ALLELE
+		std::cout << "-------GLOBAL ALLELE FREQUENCIES-------\n";
+		for(const auto& c: g_clones){
+			if(are_same(generational_g_freqs[gen][c],0) || generational_g_freqs[gen][c] != generational_g_freqs[gen][c]){
+				continue;
+			}
+			std::cout << "clone_" << (int)c << ": " << generational_g_freqs[gen][c] << "\n";
+		}
+		std::cout << g_clones.size() << " total clones\n\n";
+		#endif
 
-		// // print mean moi
-		// std::cout << "\npoisson_mean: " << poisson_mean << "\n";
-		// std::cout << "num_infected: " << num_infected << "\n";
+		//PRINT HOSTS
+		#ifdef DEBUG_HOST
+		std::cout << "\n-------HOST SUMMARIES-------\n\n";
+		std::cout << "MOI\n";
+		for(int i=0; i<NUM_HOSTS; i++){
+			host_population[i].print_summary();
+		}
+		#endif
+
+		//PRINT TRANSMISSION
+		#ifdef DEBUG_TRANSMISSION
+		std::cout << "\npoisson_mean: " << poisson_mean << "\n";
+		std::cout << "num_infected: " << num_infected << "\n";
+		#endif
 
 	}
 	//export data
