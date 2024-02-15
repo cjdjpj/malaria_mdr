@@ -16,11 +16,13 @@ int main(){
 	read_csv_to_2d_array_drug("../data/fitness_values.csv", clone_drug_fitness);
 
 	//global clone data collection
+	long double generational_poisson_mean[NUM_GENERATIONS] = {};
 	long double generational_g_freqs[NUM_GENERATIONS][NUM_UNIQUE_CLONES] = {};
 	std::unordered_set<uint8_t> g_clones = {};
 
 	//set initial conditions (could use yaml or smth)	
 	poisson_mean = STARTING_POISSON_MEAN;
+	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
 	g_clones.insert(5);
 	g_clones.insert(35);
 	g_clones.insert(21);
@@ -79,9 +81,12 @@ int main(){
 		for(int i=0; i<NUM_HOSTS; i++){
 			for (const auto& c: host_population[i].i_clones) {
 				g_clones.insert(c);
+				//record g_freqs for current gen
 			    generational_g_freqs[gen][c] += host_population[i].i_freqs[c] * (host_population[i].fitness / total_fitness);
 			}
 		}
+		//record poisson mean for current gen
+		generational_poisson_mean[gen] = poisson_mean;
 
 		//*****mutation***** 
 		for(auto it = g_clones.begin(); it != g_clones.end(); ++it){
@@ -135,6 +140,7 @@ int main(){
 	}
 	//export data
 	write_2d_array_to_csv_clonefreq("../data/g_freqs.csv", generational_g_freqs);
+	write_array_to_csv_poisson_mean("../data/poisson_mean.csv", generational_poisson_mean);
 
 	//cleanup
 	delete[] host_population;

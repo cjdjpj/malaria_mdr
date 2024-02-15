@@ -36,3 +36,16 @@ void write_2d_array_to_csv_clonefreq(const std::string& file_path, long double (
         file << std::endl;
     }
 }
+
+void write_array_to_csv_poisson_mean(const std::string& file_path, long double (&data)[NUM_GENERATIONS]) {
+    std::ofstream file(file_path);
+    
+    if (!file.is_open()) {
+        throw std::runtime_error("Could not open file for writing");
+    }
+
+    for (int row = 0; row < NUM_GENERATIONS; ++row) {
+        file << std::setprecision(17) << data[row];
+        file << std::endl;
+    }
+}

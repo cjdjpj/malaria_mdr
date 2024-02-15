@@ -25,7 +25,7 @@ void Host::choose_clones(long double global_frequencies[], int total_clones, int
 }
 
 void Host::choose_drugs(){
-	Host::drug = 0;
+	Host::drug = 1;
 }
 
 
