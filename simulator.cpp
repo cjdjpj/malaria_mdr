@@ -23,16 +23,16 @@ int main(){
 	//set initial conditions (could use yaml or smth)	
 	poisson_mean = STARTING_POISSON_MEAN;
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
-	g_clones.insert(5);
-	g_clones.insert(35);
-	g_clones.insert(21);
+	g_clones.insert(48);
+	g_clones.insert(36);
+	g_clones.insert(11);
 	g_clones.insert(19);
-	g_clones.insert(2);
-	generational_g_freqs[0][5] = 1.0/5;
-	generational_g_freqs[0][35] = 1.0/5;
-	generational_g_freqs[0][21] = 1.0/5;
+	g_clones.insert(7);
+	generational_g_freqs[0][48] = 1.0/5;
+	generational_g_freqs[0][36] = 1.0/5;
+	generational_g_freqs[0][11] = 1.0/5;
 	generational_g_freqs[0][19] = 1.0/5;
-	generational_g_freqs[0][2] = 1.0/5;
+	generational_g_freqs[0][7] = 1.0/5;
 
 
 	//begin sim
@@ -64,7 +64,7 @@ int main(){
 
 			host_population[i].naturally_select(clone_drug_fitness);
 
-			host_population[i].recombine();
+			// host_population[i].recombine();
 		}
 
 		//*****census*****

@@ -22,7 +22,7 @@ plt.ylabel('Global Frequency')
 plt.title('Global Frequency of Malaria Clones Over Generations (recombination on)')
 
 # Adjust legend position and size
-plt.legend(loc='upper right', bbox_to_anchor=(1.0, 1.02), fontsize='small', ncol=2)
+plt.legend(loc='upper right', bbox_to_anchor=(1.12, 1.02), fontsize='small', ncol=2)
 
 # Add grid for better readability
 plt.grid(True)

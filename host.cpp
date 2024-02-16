@@ -25,7 +25,7 @@ void Host::choose_clones(long double global_frequencies[], int total_clones, int
 }
 
 void Host::choose_drugs(){
-	Host::drug = 1;
+	Host::drug = 7;
 }
 
 
@@ -51,7 +51,7 @@ void Host::recombine(){
 	    for (; it2 != Host::i_clones.end(); ++it2) {
 	    	find_bit_combinations(*it1, *it2, recombinants);
 	    }
-	}	
+	}
 
 	//determine freq of each allele
     long double allele_freq0[NUM_LOCI] = {};

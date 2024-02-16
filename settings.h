@@ -2,9 +2,9 @@
 
 #define STARTING_POISSON_MEAN 1.5
 
-#define R_NAUGHT 2
+#define R_NAUGHT 1.2
 
-#define LAMBDA 0.001 //mutation rate
+#define LAMBDA 0.00001 //mutation rate
 
 #define NUM_LOCI 6
 
