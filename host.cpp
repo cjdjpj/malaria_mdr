@@ -1,12 +1,12 @@
 #include "settings.h"
-#include "host.h"
 #include "utils.h"
+#include "host.h"
 
 #include <iostream>
 
 Host::Host(){
 	moi = 0;
-	fitness = 1.0; 
+	mean_fitness = 1.0; 
 	std::unordered_set<uint8_t> i_clones = {};
 	long double i_freqs[NUM_UNIQUE_CLONES] = {};
 }
@@ -24,21 +24,30 @@ void Host::choose_clones(long double global_frequencies[], int total_clones, int
 	}
 }
 
-void Host::choose_drugs(int generation, int clone_id){
-	
+void Host::choose_drugs(int generation, int clone_id , long double generational_mean_fitness[NUM_GENERATIONS]){
+
 	#ifdef DTS_SINGLE
-	drug = 1;
+	drug = 0;
 	#endif
 
 	#ifdef DTS_MFT
 	if(clone_id < NUM_UNIQUE_CLONES/3){
+		drug = 0;
+	}
+	else if(clone_id >= NUM_UNIQUE_CLONES/3 && clone_id < 2*NUM_UNIQUE_CLONES/3){
 		drug = 1;
 	}
-	else if(clone id >= NUM_UNIQUE_CLONES/3 && clone_id < 2*NUM_UNIQUE_CLONES/3){
+	else{
 		drug = 2;
 	}
-	else{
-		drug = 3;
+	#endif
+
+	#ifdef DTS_CYCLING
+	if(generational_mean_fitness[generation] > CYCLING_MEAN_FITNESS){
+		drug++;
+		if(drug == NUM_DRUGS){
+			drug = 0;
+		}
 	}
 	#endif
 }
@@ -46,13 +55,14 @@ void Host::choose_drugs(int generation, int clone_id){
 
 void Host::naturally_select(long double fitness_data[NUM_UNIQUE_CLONES][NUM_DRUGS]){
 	long double W = 0.0;
-	fitness = 0.0;
+	mean_fitness = 0.0;
 	for(const auto& c: i_clones){
-		fitness += fitness_data[c][Host::drug];
-		W += fitness_data[c][Host::drug] * Host::i_freqs[c];
+		mean_fitness += fitness_data[c][drug];
+		W += fitness_data[c][drug] * i_freqs[c];
 	}
+	mean_fitness /= i_clones.size();
 	for(const auto& c: i_clones){
-		Host::i_freqs[c] = (fitness_data[c][Host::drug] * Host::i_freqs[c])/W;
+		i_freqs[c] = (fitness_data[c][drug] * i_freqs[c])/W;
 	}
 }
 
@@ -60,10 +70,10 @@ void Host::naturally_select(long double fitness_data[NUM_UNIQUE_CLONES][NUM_DRUG
 void Host::recombine(){
 	//determine recombinants
 	std::unordered_set<uint8_t> recombinants;
-	for(auto it1 = Host::i_clones.begin(); it1 != Host::i_clones.end(); ++it1) {
+	for(auto it1 = i_clones.begin(); it1 != i_clones.end(); ++it1) {
 	    auto it2 = it1;
 	    ++it2;  
-	    for (; it2 != Host::i_clones.end(); ++it2) {
+	    for (; it2 != i_clones.end(); ++it2) {
 	    	find_bit_combinations(*it1, *it2, recombinants);
 	    }
 	}
@@ -75,9 +85,9 @@ void Host::recombine(){
     for(int i=0; i<NUM_LOCI; i++){
         long double sum = 0.0;
         uint8_t mask = 1 << i;
-        for(uint8_t e : Host::i_clones){
+        for(uint8_t e : i_clones){
             if((e&mask)){
-                sum += Host::i_freqs[e];
+                sum += i_freqs[e];
             }
         }
         allele_freq1[i] = sum;
@@ -86,7 +96,7 @@ void Host::recombine(){
 
     //determine new recombinant frequencies 
     for(const auto& recombinant : recombinants){
-    	Host::i_clones.insert(recombinant);
+    	i_clones.insert(recombinant);
     	long double product = 1.0;
     	for(int i=0; i<NUM_LOCI; i++){
         	uint8_t mask = 1 << i;
@@ -97,19 +107,20 @@ void Host::recombine(){
     			product *= allele_freq0[i];
     		}
     	}
-    	Host::i_freqs[recombinant] += product;
+    	i_freqs[recombinant] += product;
     }
 }
 
 void Host::reset(){
 	moi = 0;
-	fitness = 1.0;
-	std::fill(Host::i_freqs, Host::i_freqs + NUM_UNIQUE_CLONES, 0.0);
-	Host::i_clones.clear();
+	mean_fitness = 1.0;
+	std::fill(i_freqs, i_freqs + NUM_UNIQUE_CLONES, 0.0);
+	i_clones.clear();
 }
 
 void Host::print_summary(){
 	std::cout << (unsigned)moi << "\n";
+	std::cout << "mean_fitness: " << mean_fitness << "\n";
 	for(const auto& c: i_clones) {
 		if(are_same(i_freqs[c], 0)){
 			continue;

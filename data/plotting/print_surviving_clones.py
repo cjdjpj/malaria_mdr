@@ -1,6 +1,6 @@
 import csv
 
-file_path = '../data/g_freqs.csv'
+file_path = '../g_freqs.csv'
 
 # Load CSV file
 with open(file_path, newline='') as csvfile:

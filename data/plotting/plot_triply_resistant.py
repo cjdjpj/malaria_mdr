@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-csv_file_path = '../data/g_freqs.csv'
+csv_file_path = '../g_freqs.csv'
 data = pd.read_csv(csv_file_path)
 
 data['sum_values'] = data.iloc[:, -4:].sum(axis=1)

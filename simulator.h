@@ -1,5 +1,4 @@
 #pragma once
-#include <unordered_set>
 #include <random>
 
 std::random_device rd; // uniformly-distributed integer random number generator
@@ -8,5 +7,3 @@ std::poisson_distribution<> poisson_generator;
 long double poisson_mean;
 
 int num_infected;
-
-Host host_population[NUM_HOSTS];

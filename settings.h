@@ -2,11 +2,11 @@
 
 #define STARTING_POISSON_MEAN 1.5
 
-#define R_NAUGHT 1.2
+#define R_NAUGHT 3
 
 #define LAMBDA 0.00001 //mutation rate
 
-#define THETA 0.4 //recombination rate
+#define THETA 0.1 //recombination rate
 
 #define NUM_LOCI 6
 
@@ -14,6 +14,12 @@
 
 #define NUM_DRUGS 10
 
-#define NUM_GENERATIONS 100
+#define NUM_GENERATIONS 300
 
-#define NUM_HOSTS 100000
+#define NUM_HOSTS 300000
+
+#define CYCLING_MEAN_FITNESS 0.15
+
+#define DTS_MFT
+
+#define DEBUG_DRUG

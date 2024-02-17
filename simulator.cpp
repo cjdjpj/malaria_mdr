@@ -6,9 +6,6 @@
 
 #include <iostream>
 
-//define drug treatment strategy or debug mode
-#define DTS_SINGLE
-
 int main(){
 
 	//initialize hosts
@@ -21,6 +18,7 @@ int main(){
 	//global clone data collection
 	long double generational_poisson_mean[NUM_GENERATIONS] = {};
 	long double generational_g_freqs[NUM_GENERATIONS][NUM_UNIQUE_CLONES] = {};
+	long double generational_mean_fitness[NUM_GENERATIONS] = {};
 	std::unordered_set<uint8_t> g_clones = {};
 
 	//set initial conditions (could use yaml or smth)	
@@ -30,19 +28,19 @@ int main(){
 	g_clones.insert(36);
 	g_clones.insert(11);
 	g_clones.insert(60);
-	g_clones.insert(58);
+	g_clones.insert(3);
 	generational_g_freqs[0][48] = 1.0/5;
 	generational_g_freqs[0][36] = 1.0/5;
 	generational_g_freqs[0][11] = 1.0/5;
 	generational_g_freqs[0][60] = 1.0/5;
-	generational_g_freqs[0][58] = 1.0/5;
+	generational_g_freqs[0][3] = 1.0/5;
 
 
 	//begin sim
 	int gen = 0;
 	while(gen<NUM_GENERATIONS){
 		
-		//*****for hosts: transmission, drug distribution, selection, recombination*****
+		//*****for hosts: transmission, drug distribution, selection, recombination*****//
 		poisson_generator.reset();
 		poisson_generator.param(std::poisson_distribution<>::param_type(poisson_mean));
 		num_infected = 0;
@@ -63,7 +61,7 @@ int main(){
 
 			host_population[i].choose_clones(generational_g_freqs[gen], g_clones.size(), indices_for_diceroll);
 
-			host_population[i].choose_drugs(gen, i);
+			host_population[i].choose_drugs(gen, i, generational_mean_fitness);
 
 			host_population[i].naturally_select(clone_drug_fitness);
 
@@ -72,7 +70,7 @@ int main(){
 			}
 		}
 
-		//*****census*****
+		//*****census*****//
 		g_clones.clear();
 		gen++; //store data into next gen.
 
@@ -80,20 +78,22 @@ int main(){
 		long double total_fitness = 0.0;
 		for(int i=0; i<NUM_HOSTS; i++){
 			if(host_population[i].moi){ //only add fitnesses of infected individuals
-				total_fitness += host_population[i].fitness;
+				total_fitness += host_population[i].mean_fitness;
 			}
 		}
+		generational_mean_fitness[gen] = total_fitness/NUM_HOSTS;
+
 		for(int i=0; i<NUM_HOSTS; i++){
 			for (const auto& c: host_population[i].i_clones) {
 				g_clones.insert(c);
 				//record g_freqs for current gen
-			    generational_g_freqs[gen][c] += host_population[i].i_freqs[c] * (host_population[i].fitness / total_fitness);
+			    generational_g_freqs[gen][c] += host_population[i].i_freqs[c] * (host_population[i].mean_fitness / total_fitness);
 			}
 		}
 		//record poisson mean for current gen
 		generational_poisson_mean[gen] = poisson_mean;
 
-		//*****mutation***** 
+		//*****mutation*****//
 		for(auto it = g_clones.begin(); it != g_clones.end(); ++it){
 			uint8_t c = *it;
 			int num_mutants = (NUM_LOCI-std::popcount(c));
@@ -136,6 +136,13 @@ int main(){
 		}
 		#endif
 
+		//PRINT DRUG
+		#ifdef DEBUG_DRUG
+			#ifdef DTS_CYCLING
+			std::cout << "DRUG IN CIRCULATION: " << (int)host_population[5].drug << "\n";
+			#endif
+		#endif
+
 		//PRINT TRANSMISSION
 		#ifdef DEBUG_TRANSMISSION
 		std::cout << "\npoisson_mean: " << poisson_mean << "\n";
@@ -145,6 +152,7 @@ int main(){
 	}
 	//export data
 	write_2d_array_to_csv_clonefreq("../data/g_freqs.csv", generational_g_freqs);
+	write_array_to_csv("../data/mean_fitness.csv", generational_mean_fitness);
 	write_array_to_csv("../data/poisson_mean.csv", generational_poisson_mean);
 
 	//cleanup
