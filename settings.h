@@ -6,6 +6,8 @@
 
 #define LAMBDA 0.00001 //mutation rate
 
+#define THETA 0.3 //recombination rate
+
 #define NUM_LOCI 6
 
 #define NUM_UNIQUE_CLONES 64 //2^6 = 64

@@ -64,7 +64,9 @@ int main(){
 
 			host_population[i].naturally_select(clone_drug_fitness);
 
-			host_population[i].recombine();
+			if(weighted_flip(THETA)){
+				host_population[i].recombine();
+			}
 		}
 
 		//*****census*****

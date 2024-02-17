@@ -14,13 +14,24 @@ int weighted_dice_roll_with_indices(long double weights[], int num_sides, int in
     
     for (int k=0; k<num_sides; ++k) {
         current_weight += weights[indices[k]];
-        if (random_number <= current_weight * resolution) {
+        if (random_number < current_weight * resolution) {
             return k; 
         }
     }
     // This should not happen unless there's an issue with the weights.
     std::cout << "current_weight: " << current_weight << std::endl;
     throw std::logic_error("Invalid weighted dice state.");
+}
+
+bool weighted_flip(double prob){
+    uint32_t resolution = 4294967295;
+    uint32_t random_number = arc4random_uniform(resolution);
+    if(random_number < prob * resolution){
+        return true;
+    }
+    else{
+        return false;
+    }
 }
 
 void find_bit_combinations(uint8_t a, uint8_t b, std::unordered_set<uint8_t>& set) {
