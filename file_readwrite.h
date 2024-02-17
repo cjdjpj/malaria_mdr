@@ -37,7 +37,7 @@ void write_2d_array_to_csv_clonefreq(const std::string& file_path, long double (
     }
 }
 
-void write_array_to_csv_poisson_mean(const std::string& file_path, long double (&data)[NUM_GENERATIONS]) {
+void write_array_to_csv(const std::string& file_path, long double (&data)[NUM_GENERATIONS]) {
     std::ofstream file(file_path);
     
     if (!file.is_open()) {

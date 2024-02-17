@@ -6,6 +6,9 @@
 
 #include <iostream>
 
+//define drug treatment strategy or debug mode
+#define DTS_SINGLE
+
 int main(){
 
 	//initialize hosts
@@ -26,13 +29,13 @@ int main(){
 	g_clones.insert(48);
 	g_clones.insert(36);
 	g_clones.insert(11);
-	g_clones.insert(19);
-	g_clones.insert(7);
+	g_clones.insert(60);
+	g_clones.insert(58);
 	generational_g_freqs[0][48] = 1.0/5;
 	generational_g_freqs[0][36] = 1.0/5;
 	generational_g_freqs[0][11] = 1.0/5;
-	generational_g_freqs[0][19] = 1.0/5;
-	generational_g_freqs[0][7] = 1.0/5;
+	generational_g_freqs[0][60] = 1.0/5;
+	generational_g_freqs[0][58] = 1.0/5;
 
 
 	//begin sim
@@ -60,7 +63,7 @@ int main(){
 
 			host_population[i].choose_clones(generational_g_freqs[gen], g_clones.size(), indices_for_diceroll);
 
-			host_population[i].choose_drugs();
+			host_population[i].choose_drugs(gen, i);
 
 			host_population[i].naturally_select(clone_drug_fitness);
 
@@ -142,7 +145,7 @@ int main(){
 	}
 	//export data
 	write_2d_array_to_csv_clonefreq("../data/g_freqs.csv", generational_g_freqs);
-	write_array_to_csv_poisson_mean("../data/poisson_mean.csv", generational_poisson_mean);
+	write_array_to_csv("../data/poisson_mean.csv", generational_poisson_mean);
 
 	//cleanup
 	delete[] host_population;

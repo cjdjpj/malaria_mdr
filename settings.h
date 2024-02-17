@@ -6,7 +6,7 @@
 
 #define LAMBDA 0.00001 //mutation rate
 
-#define THETA 0.3 //recombination rate
+#define THETA 0.4 //recombination rate
 
 #define NUM_LOCI 6
 

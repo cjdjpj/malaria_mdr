@@ -14,7 +14,7 @@ public:
 	long double i_freqs[NUM_UNIQUE_CLONES];
 
 	void choose_clones(long double frequencies[], int total_clones, int indices_for_diceroll[]); 
-	void choose_drugs();
+	void choose_drugs(int generation, int clone_id);
 	void recombine();
 	void naturally_select(long double fitness_data[NUM_UNIQUE_CLONES][NUM_DRUGS]);
 	void reset();

@@ -24,8 +24,23 @@ void Host::choose_clones(long double global_frequencies[], int total_clones, int
 	}
 }
 
-void Host::choose_drugs(){
-	Host::drug = 3;
+void Host::choose_drugs(int generation, int clone_id){
+	
+	#ifdef DTS_SINGLE
+	drug = 1;
+	#endif
+
+	#ifdef DTS_MFT
+	if(clone_id < NUM_UNIQUE_CLONES/3){
+		drug = 1;
+	}
+	else if(clone id >= NUM_UNIQUE_CLONES/3 && clone_id < 2*NUM_UNIQUE_CLONES/3){
+		drug = 2;
+	}
+	else{
+		drug = 3;
+	}
+	#endif
 }
 
 
