@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 csv_file_path = '../mean_fitness.csv'
-data = pd.read_csv(csv_file_path)
+data = pd.read_csv(csv_file_path, header = None)
 
 plt.figure(figsize=(20, 10))
 sns.set(style="whitegrid")
 
-plt.plot(data.iloc[:])
+plt.plot(data.iloc[1:])
 
 plt.xlabel('Generation')
 plt.ylabel('Mean fitness (unitless)')

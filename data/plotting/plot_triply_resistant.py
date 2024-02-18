@@ -3,11 +3,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 csv_file_path = '../g_freqs.csv'
-data = pd.read_csv(csv_file_path)
+data = pd.read_csv(csv_file_path, header = None)
 
 data['sum_values'] = data.iloc[:, -4:].sum(axis=1)
 
 sns.set(style="whitegrid")
+
+print(data)
 
 plt.figure(figsize=(12, 8))
 plt.plot(data.index + 1, data['sum_values'], linestyle='-', color='b', label='Sum of Four Rightmost Values')

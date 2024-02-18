@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 csv_file_path = '../g_freqs.csv'
-data = pd.read_csv(csv_file_path)
+data = pd.read_csv(csv_file_path, header = None)
 
 data = data.reset_index()
 data.rename(columns={'index': 'Generation'}, inplace=True)

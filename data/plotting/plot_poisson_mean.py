@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 csv_file_path = '../poisson_mean.csv'
-data = pd.read_csv(csv_file_path)
+data = pd.read_csv(csv_file_path, header = None)
 
 plt.figure(figsize=(20, 10))
 sns.set(style="whitegrid")

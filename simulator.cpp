@@ -90,8 +90,6 @@ int main(){
 			    generational_g_freqs[gen][c] += host_population[i].i_freqs[c] * (host_population[i].mean_fitness / total_fitness);
 			}
 		}
-		//record poisson mean for current gen
-		generational_poisson_mean[gen] = poisson_mean;
 
 		//*****mutation*****//
 		for(auto it = g_clones.begin(); it != g_clones.end(); ++it){
@@ -109,6 +107,7 @@ int main(){
 
 		//find new poisson mean
 		poisson_mean = R_NAUGHT * ((long double)num_infected/NUM_HOSTS) * (1-((long double)num_infected/NUM_HOSTS));
+		generational_poisson_mean[gen] = poisson_mean;
 		
 		//********************debugging********************//
 
