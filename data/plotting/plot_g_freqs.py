@@ -10,6 +10,8 @@ data.rename(columns={'index': 'Generation'}, inplace=True)
 
 plt.figure(figsize=(20, 10))
 
+print(data)
+
 surviving_clones = []
 for i, column in enumerate(data.columns[1:], start=1):
     line = plt.plot(data['Generation'], data[column], alpha=0.6, label=f'Clone_{i}')[0]

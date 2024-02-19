@@ -45,7 +45,7 @@ void Host::choose_drugs(int generation, int clone_id , long double generational_
 	#ifdef DTS_CYCLING
 	if(generational_mean_fitness[generation] > CYCLING_MEAN_FITNESS){
 		drug++;
-		if(drug == NUM_DRUGS){
+		if(drug == 7){
 			drug = 0;
 		}
 	}

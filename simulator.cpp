@@ -118,7 +118,7 @@ int main(){
 		#ifdef DEBUG_G_ALLELE
 		std::cout << "-------GLOBAL ALLELE FREQUENCIES-------\n";
 		for(const auto& c: g_clones){
-			if(are_same(generational_g_freqs[gen][c],0) || generational_g_freqs[gen][c] != generational_g_freqs[gen][c]){
+			if((generational_g_freqs[gen][c]==0) || generational_g_freqs[gen][c] != generational_g_freqs[gen][c]){
 				continue;
 			}
 			std::cout << "clone_" << (int)c << ": " << generational_g_freqs[gen][c] << "\n";

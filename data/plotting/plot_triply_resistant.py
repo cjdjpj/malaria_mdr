@@ -9,7 +9,7 @@ data['sum_values'] = data.iloc[:, -4:].sum(axis=1)
 
 sns.set(style="whitegrid")
 
-print(data)
+print(data['sum_values'])
 
 plt.figure(figsize=(12, 8))
 plt.plot(data.index + 1, data['sum_values'], linestyle='-', color='b', label='Sum of Four Rightmost Values')
