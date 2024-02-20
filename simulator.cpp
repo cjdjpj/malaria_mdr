@@ -83,14 +83,22 @@ int main(){
 				total_fitness += host_population[i].mean_fitness;
 			}
 		}
-		generational_mean_fitness[gen] = total_fitness/NUM_HOSTS;
+		generational_mean_fitness[gen] = total_fitness/num_infected;
 
 		for(int i=0; i<NUM_HOSTS; i++){
 			for (const auto& c: host_population[i].i_clones) {
 				g_clones.insert(c);
-				//record g_freqs for current gen
 			    generational_g_freqs[gen][c] += host_population[i].i_freqs[c] * (host_population[i].mean_fitness / total_fitness);
 			}
+		}
+
+		//equalize global frequency
+		long double total_freq = 0.0;
+		for(const auto& c : g_clones){
+			total_freq += generational_g_freqs[gen][c];
+		}
+		for(const auto& c : g_clones){
+			generational_g_freqs[gen][c] /= total_freq;
 		}
 
 		//*****mutation*****//
@@ -98,7 +106,7 @@ int main(){
 			uint8_t c = *it;
 			int num_mutants = (NUM_LOCI-std::popcount(c));
 			for(int i=0; i<NUM_LOCI; i++){
-				int current_bit = (uint8_t)pow(2, i);
+				int current_bit = 1 << i;
 				if(!(current_bit&c)){
 					generational_g_freqs[gen][(c+current_bit)] += generational_g_freqs[gen][c] * LAMBDA;
 					g_clones.insert((c+current_bit));
@@ -119,7 +127,7 @@ int main(){
 		#ifdef DEBUG_G_ALLELE
 		std::cout << "-------GLOBAL ALLELE FREQUENCIES-------\n";
 		for(const auto& c: g_clones){
-			if((generational_g_freqs[gen][c]==0) || generational_g_freqs[gen][c] != generational_g_freqs[gen][c]){
+			if(are_same(generational_g_freqs[gen][c],0)) || generational_g_freqs[gen][c] != generational_g_freqs[gen][c]){
 				continue;
 			}
 			std::cout << "clone_" << (int)c << ": " << generational_g_freqs[gen][c] << "\n";
@@ -139,7 +147,7 @@ int main(){
 		//PRINT DRUG
 		#ifdef DEBUG_DRUG
 			#ifdef DTS_CYCLING
-			std::cout << "DRUG IN CIRCULATION: " << (int)host_population[5].drug << "\n";
+			std::cout << "DRUG IN CIRCULATION: " << (int)host_population[5].host_drug << "\n";
 			#endif
 		#endif
 

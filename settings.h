@@ -14,11 +14,13 @@
 
 #define NUM_DRUGS 10
 
+enum drug {AS, LM, AQ, PPQ, MQ, CQ, AL, ASAQ, DHAPPQ, ASMQ};
+
 #define NUM_GENERATIONS 300
 
 #define NUM_HOSTS 300000
 
-#define CYCLING_MEAN_FITNESS 0.18
+#define CYCLING_MEAN_FITNESS 0.35
 
 #define DTS_CYCLING
 

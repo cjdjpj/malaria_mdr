@@ -6,6 +6,7 @@
 
 Host::Host(){
 	moi = 0;
+	host_drug = AS;
 	mean_fitness = 1.0; 
 	std::unordered_set<uint8_t> i_clones = {};
 	long double i_freqs[NUM_UNIQUE_CLONES] = {};
@@ -27,26 +28,28 @@ void Host::choose_clones(long double global_frequencies[], int total_clones, int
 void Host::choose_drugs(int generation, int clone_id , long double generational_mean_fitness[NUM_GENERATIONS]){
 
 	#ifdef DTS_SINGLE
-	drug = 0;
+	host_drug = AS;
 	#endif
 
 	#ifdef DTS_MFT
 	if(clone_id < NUM_UNIQUE_CLONES/3){
-		drug = 0;
+		host_drug = LM;
 	}
 	else if(clone_id >= NUM_UNIQUE_CLONES/3 && clone_id < 2*NUM_UNIQUE_CLONES/3){
-		drug = 1;
+		host_drug = AQ;
 	}
 	else{
-		drug = 2;
+		host_drug = CQ;
 	}
 	#endif
 
 	#ifdef DTS_CYCLING
 	if(generational_mean_fitness[generation] > CYCLING_MEAN_FITNESS){
-		drug++;
-		if(drug == 7){
-			drug = 0;
+		int n = (int)host_drug;
+		n++;
+		host_drug = (drug)n;
+		if(host_drug == ASAQ){ 
+			host_drug = AS;
 		}
 	}
 	#endif
@@ -54,15 +57,15 @@ void Host::choose_drugs(int generation, int clone_id , long double generational_
 
 
 void Host::naturally_select(long double fitness_data[NUM_UNIQUE_CLONES][NUM_DRUGS]){
-	long double W = 0.0;
+	if(!moi){
+		return;
+	}
 	mean_fitness = 0.0;
 	for(const auto& c: i_clones){
-		mean_fitness += fitness_data[c][drug];
-		W += fitness_data[c][drug] * i_freqs[c];
+		mean_fitness += fitness_data[c][host_drug] * i_freqs[c];
 	}
-	mean_fitness /= i_clones.size();
 	for(const auto& c: i_clones){
-		i_freqs[c] = (fitness_data[c][drug] * i_freqs[c])/W;
+		i_freqs[c] = (fitness_data[c][host_drug] * i_freqs[c])/mean_fitness;
 	}
 }
 
