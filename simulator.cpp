@@ -50,15 +50,7 @@ int main(){
 				num_infected++;
 			}
 
-			//generate indices_for_diceroll (reformat necessary as g_freqs don't go 0->1->2->...)
-			int indices_for_diceroll[g_clones.size()];
-			int k=0;
-			for (const auto& c: g_clones) {
-			    indices_for_diceroll[k] = c;
-			    k++;
-			}
-
-			host_population[i].choose_clones(generational_g_freqs[gen], g_clones.size(), indices_for_diceroll);
+			host_population[i].choose_clones(generational_g_freqs[gen], NUM_UNIQUE_CLONES);
 
 			host_population[i].choose_drugs(gen, i, generational_mean_fitness);
 

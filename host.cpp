@@ -12,10 +12,10 @@ Host::Host(){
 	long double i_freqs[NUM_UNIQUE_CLONES] = {};
 }
 
-void Host::choose_clones(long double global_frequencies[], int total_clones, int indices_for_diceroll[]){
+void Host::choose_clones(long double global_frequencies[], int total_clones){
 	for(int i=0; i<moi; i++){
 		//select clones
-		int clone_injected = indices_for_diceroll[weighted_dice_roll_with_indices(global_frequencies, total_clones, indices_for_diceroll)];
+		int clone_injected = weighted_dice_roll_with_indices(global_frequencies, total_clones);
 
 		//add to i_clones
 		i_clones.insert(clone_injected);

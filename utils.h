@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_set>
 
-int weighted_dice_roll_with_indices(long double weights[], int num_sides, int indices[]);
+int weighted_dice_roll_with_indices(long double weights[], int num_sides);
 
 bool weighted_flip(double prob);
 

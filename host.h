@@ -13,7 +13,7 @@ public:
 	std::unordered_set<uint8_t> i_clones;
 	long double i_freqs[NUM_UNIQUE_CLONES];
 
-	void choose_clones(long double frequencies[], int total_clones, int indices_for_diceroll[]); 
+	void choose_clones(long double frequencies[], int total_clones); 
 	void choose_drugs(int generation, int clone_id, long double generational_total_fitness[NUM_GENERATIONS]);
 	void recombine();
 	void naturally_select(long double fitness_data[NUM_UNIQUE_CLONES][NUM_DRUGS]);

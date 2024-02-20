@@ -9,6 +9,7 @@ data = data.reset_index()
 data.rename(columns={'index': 'Generation'}, inplace=True)
 
 plt.figure(figsize=(20, 10))
+plt.ylim(0,1)
 
 print(data)
 

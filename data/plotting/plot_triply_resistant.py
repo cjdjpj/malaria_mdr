@@ -11,8 +11,8 @@ sns.set(style="whitegrid")
 
 print(data['sum_values'])
 
-plt.figure(figsize=(12, 8))
-plt.plot(data.index + 1, data['sum_values'], linestyle='-', color='b', label='Sum of Four Rightmost Values')
+plt.figure(figsize=(20,10))
+plt.plot(data.index + 1, data['sum_values'], linestyle='-', color='b')
 plt.title('Frequency of triply resistant clones over generations', fontsize=16)
 plt.xlabel('Generation', fontsize=14)
 plt.ylabel('Frequency of triply resistant clones', fontsize=14)

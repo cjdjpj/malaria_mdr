@@ -3,7 +3,7 @@
 
 #include "utils.h"
 
-int weighted_dice_roll_with_indices(long double weights[], int num_sides, int indices[]) {
+int weighted_dice_roll_with_indices(long double weights[], int num_sides) {
     if (num_sides <= 0) {
            throw std::invalid_argument("Number of sides must > 0");
     }
@@ -13,7 +13,7 @@ int weighted_dice_roll_with_indices(long double weights[], int num_sides, int in
     long double current_weight = 0;
     
     for (int k=0; k<num_sides; ++k) {
-        current_weight += weights[indices[k]];
+        current_weight += weights[k];
         if (random_number < current_weight * resolution) {
             return k; 
         }
