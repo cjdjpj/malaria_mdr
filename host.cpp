@@ -118,6 +118,16 @@ void Host::reset(){
 	i_clones.clear();
 }
 
+void Host::validate_i_freq(){
+	long double sum = 0.0;
+	for(int j=0; j<NUM_UNIQUE_CLONES; j++){
+		sum += i_freqs[j];
+	}
+	if(moi && !are_same(sum, 1.0)){
+		std::cout << "invalid, f=" << sum << std::endl;
+	}
+}
+
 void Host::print_summary(){
 	std::cout << (unsigned)moi << "\n";
 	std::cout << "mean_fitness: " << mean_fitness << "\n";

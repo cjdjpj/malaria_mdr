@@ -21,8 +21,7 @@ int main(){
 	long double generational_mean_fitness[NUM_GENERATIONS] = {};
 	std::unordered_set<uint8_t> g_clones = {};
 
-	//set initial conditions (could use yaml or smth)	
-	poisson_mean = STARTING_POISSON_MEAN;
+	//set initial conditions
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
 	g_clones.insert(48);
 	g_clones.insert(36);
@@ -42,7 +41,7 @@ int main(){
 		
 		//*****for hosts: transmission, drug distribution, selection, recombination*****//
 		poisson_generator.reset();
-		poisson_generator.param(std::poisson_distribution<>::param_type(poisson_mean));
+		poisson_generator.param(std::poisson_distribution<>::param_type(generational_poisson_mean[gen]));
 		num_infected = 0;
 		for(int i=0; i<NUM_HOSTS; i++){
 			host_population[i].reset();
@@ -68,7 +67,10 @@ int main(){
 			if(weighted_flip(THETA)){
 				host_population[i].recombine();
 			}
+
+			// host_population[i].validate_i_freq();
 		}
+			
 
 		//*****census*****//
 		g_clones.clear();
@@ -106,8 +108,7 @@ int main(){
 		}
 
 		//find new poisson mean
-		poisson_mean = R_NAUGHT * ((long double)num_infected/NUM_HOSTS) * (1-((long double)num_infected/NUM_HOSTS));
-		generational_poisson_mean[gen] = poisson_mean;
+		generational_poisson_mean[gen] = R_NAUGHT * ((long double)num_infected/NUM_HOSTS) * (1-((long double)num_infected/NUM_HOSTS));
 		
 		//********************debugging********************//
 
@@ -144,7 +145,7 @@ int main(){
 
 		//PRINT TRANSMISSION
 		#ifdef DEBUG_TRANSMISSION
-		std::cout << "\npoisson_mean: " << poisson_mean << "\n";
+		std::cout << "\npoisson_mean: " << generational_poisson_mean[gen] << "\n";
 		std::cout << "num_infected: " << num_infected << "\n";
 		#endif
 

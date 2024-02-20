@@ -55,5 +55,5 @@ void find_bit_combinations(uint8_t a, uint8_t b, std::unordered_set<uint8_t>& se
 }
 
 bool are_same(long double a, long double b){
-    return fabs(a - b) < 0.00000000000000000000000001;
+    return fabs(a - b) < 0.000000000000001;
 }
