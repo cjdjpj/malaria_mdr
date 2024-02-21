@@ -33,7 +33,7 @@ void write_2d_array_to_csv_clonefreq(const std::string& file_path, long double (
                 file << ",";
             }
         }
-        file << std::endl;
+        file << "\n";
     }
 }
 
@@ -46,6 +46,6 @@ void write_array_to_csv(const std::string& file_path, long double (&data)[NUM_GE
 
     for (int row = 0; row < NUM_GENERATIONS; ++row) {
         file << std::setprecision(17) << data[row];
-        file << std::endl;
+        file << "\n";
     }
 }

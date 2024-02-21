@@ -38,14 +38,16 @@ int main(){
 	//begin sim
 	int gen = 0;
 	while(gen<NUM_GENERATIONS){
-		
+
 		//*****for hosts: transmission, drug distribution, selection, recombination*****//
 		poisson_generator.reset();
 		poisson_generator.param(std::poisson_distribution<>::param_type(generational_poisson_mean[gen]));
 		num_infected = 0;
 		for(int i=0; i<NUM_HOSTS; i++){
 			host_population[i].reset();
+
 			host_population[i].moi = poisson_generator(rng);
+
 			if(host_population[i].moi){
 				num_infected++;
 			}
@@ -56,13 +58,10 @@ int main(){
 
 			host_population[i].naturally_select(clone_drug_fitness);
 
-			if(weighted_flip(THETA)){
-				host_population[i].recombine();
-			}
+			host_population[i].recombine();
 
-			// host_population[i].validate_i_freq();
+			host_population[i].validate_i_freq();
 		}
-			
 
 		//*****census*****//
 		g_clones.clear();
@@ -112,7 +111,6 @@ int main(){
 		
 		//********************debugging********************//
 
-		//print global allele freqs
 		std::cout << "\nGEN " << gen << "\n";
 
 		//PRINT GLOBAL ALLELE FREQUENCIES
