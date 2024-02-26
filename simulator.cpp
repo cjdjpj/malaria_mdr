@@ -23,21 +23,15 @@ int main(){
 
 	//set initial conditions
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
-	g_clones.insert(48);
-	g_clones.insert(36);
-	g_clones.insert(11);
-	g_clones.insert(60);
+	g_clones.insert(0);
 	g_clones.insert(3);
-	generational_g_freqs[0][48] = 1.0/5;
-	generational_g_freqs[0][36] = 1.0/5;
-	generational_g_freqs[0][11] = 1.0/5;
-	generational_g_freqs[0][60] = 1.0/5;
-	generational_g_freqs[0][3] = 1.0/5;
+	generational_g_freqs[0][0] = 0.5;
+	generational_g_freqs[0][3] = 0.5;
 
 
 	//begin sim
 	int gen = 0;
-	while(gen<NUM_GENERATIONS){
+	while(gen<NUM_GENERATIONS-1){
 
 		//*****for hosts: transmission, drug distribution, selection, recombination*****//
 		poisson_generator.reset();
@@ -70,11 +64,9 @@ int main(){
 		//find average (weighted) clone freqs
 		long double total_fitness = 0.0;
 		for(int i=0; i<NUM_HOSTS; i++){
-			if(host_population[i].moi){ //only add fitnesses of infected individuals
-				total_fitness += host_population[i].mean_fitness;
-			}
+			total_fitness += host_population[i].mean_fitness;
 		}
-		generational_mean_fitness[gen] = total_fitness/num_infected;
+		generational_mean_fitness[gen] = total_fitness/NUM_HOSTS;
 
 		for(int i=0; i<NUM_HOSTS; i++){
 			for (const auto& c: host_population[i].i_clones) {
@@ -107,8 +99,8 @@ int main(){
 		}
 
 		//find new poisson mean
-		generational_poisson_mean[gen] = R_NAUGHT * ((long double)num_infected/NUM_HOSTS) * (1-((long double)num_infected/NUM_HOSTS));
-		
+		generational_poisson_mean[gen] = R_NAUGHT * (1-generational_mean_fitness[gen]);
+
 		//********************debugging********************//
 
 		std::cout << "\nGEN " << gen << "\n";
@@ -117,7 +109,7 @@ int main(){
 		#ifdef DEBUG_G_ALLELE
 		std::cout << "-------GLOBAL ALLELE FREQUENCIES-------\n";
 		for(const auto& c: g_clones){
-			if(are_same(generational_g_freqs[gen][c],0)) || generational_g_freqs[gen][c] != generational_g_freqs[gen][c]){
+			if(are_same(generational_g_freqs[gen][c],0)){
 				continue;
 			}
 			std::cout << "clone_" << (int)c << ": " << generational_g_freqs[gen][c] << "\n";

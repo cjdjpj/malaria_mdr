@@ -3,7 +3,7 @@
 #include <sstream>
 #include "settings.h"
 
-void read_csv_to_2d_array_drug(const std::string& file_path, long double (&data)[NUM_UNIQUE_CLONES][NUM_DRUGS]) {
+void read_csv_to_2d_array_drug(std::string file_path, long double (&data)[NUM_UNIQUE_CLONES][NUM_DRUGS]) {
     std::ifstream file(file_path);
 
     std::string line;
@@ -19,33 +19,32 @@ void read_csv_to_2d_array_drug(const std::string& file_path, long double (&data)
     }
 }
 
-void write_2d_array_to_csv_clonefreq(const std::string& file_path, long double (&data)[NUM_GENERATIONS][NUM_UNIQUE_CLONES]) {
+void write_2d_array_to_csv_clonefreq(std::string file_path, const long double data[NUM_GENERATIONS][NUM_UNIQUE_CLONES]) {
     std::ofstream file(file_path);
     
     if (!file.is_open()) {
         throw std::runtime_error("Could not open file for writing");
     }
 
-    for (int row = 0; row < NUM_GENERATIONS; ++row) {
-        for (int col = 0; col < NUM_UNIQUE_CLONES; ++col) {
-            file << std::setprecision(17) << data[row][col];
-            if (col != NUM_UNIQUE_CLONES - 1) {
-                file << ",";
+    for (int row=0; row<NUM_GENERATIONS; row++) {
+        for (int col=0; col<NUM_UNIQUE_CLONES; col++){
+            if(col == NUM_UNIQUE_CLONES-1){
+                file << std::setprecision(17) << data[row][col] << '\n';
+                break;
             }
+            file << data[row][col] <<',';
         }
-        file << "\n";
     }
 }
 
-void write_array_to_csv(const std::string& file_path, long double (&data)[NUM_GENERATIONS]) {
+void write_array_to_csv(std::string file_path, const long double (&data)[NUM_GENERATIONS]) {
     std::ofstream file(file_path);
     
     if (!file.is_open()) {
         throw std::runtime_error("Could not open file for writing");
     }
 
-    for (int row = 0; row < NUM_GENERATIONS; ++row) {
-        file << std::setprecision(17) << data[row];
-        file << "\n";
+    for (int row = 0; row < NUM_GENERATIONS; row++) {
+        file << std::setprecision(17) << data[row] << "\n";
     }
 }

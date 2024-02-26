@@ -1,20 +1,19 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 csv_file_path = '../g_freqs.csv'
-data = pd.read_csv(csv_file_path, header = None)
+data = pd.read_csv(csv_file_path, header=None)
 
-data['sum_values'] = data.iloc[:, -4:].sum(axis=1)
-
-sns.set(style="whitegrid")
+columns_to_sum = [7, 11, 13, 14, 15] # triply resistant clones
+data['sum_values'] = data.iloc[:, columns_to_sum].sum(axis=1)
 
 print(data['sum_values'])
 
-plt.figure(figsize=(20,10))
+plt.figure(figsize=(20, 10))
 plt.plot(data.index + 1, data['sum_values'], linestyle='-', color='b')
 plt.title('Frequency of triply resistant clones over generations', fontsize=16)
 plt.xlabel('Generation', fontsize=14)
 plt.ylabel('Frequency of triply resistant clones', fontsize=14)
 plt.grid(True)
+plt.ylim(0, 1)
 plt.show()

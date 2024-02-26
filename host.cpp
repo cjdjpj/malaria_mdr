@@ -28,7 +28,7 @@ void Host::choose_clones(const long double global_frequencies[], int total_clone
 void Host::choose_drugs(int generation, int clone_id , const long double generational_mean_fitness[NUM_GENERATIONS]){
 
 	#ifdef DTS_SINGLE
-	host_drug = AS;
+	host_drug = LM;
 	#endif
 
 	#ifdef DTS_MFT
@@ -48,7 +48,8 @@ void Host::choose_drugs(int generation, int clone_id , const long double generat
 		host_drug = AS;
 		return;
 	}
-	if(generational_mean_fitness[generation] > CYCLING_MEAN_FITNESS){
+	if(generation % 30 == 0){
+		// generational_mean_fitness[generation] > CYCLING_MEAN_FITNESS
 		int n = (int)host_drug;
 		n++;
 		host_drug = (drug)n;
@@ -62,6 +63,7 @@ void Host::choose_drugs(int generation, int clone_id , const long double generat
 
 void Host::naturally_select(const long double fitness_data[NUM_UNIQUE_CLONES][NUM_DRUGS]){
 	if(!moi){
+		mean_fitness = 1.0;
 		return;
 	}
 	mean_fitness = 0.0;
@@ -75,10 +77,7 @@ void Host::naturally_select(const long double fitness_data[NUM_UNIQUE_CLONES][NU
 
 
 void Host::recombine(){
-	if(!weighted_flip(THETA)){
-		return;
-	}
-	if(!moi){
+	if(!weighted_flip(THETA) || !moi){
 		return;
 	}
 	//determine recombinants
@@ -129,7 +128,7 @@ void Host::reset(){
 	i_clones.clear();
 }
 
-void Host::validate_i_freq(){
+void Host::validate_i_freq() const {
 	long double sum = 0.0;
 	for(int j=0; j<NUM_UNIQUE_CLONES; j++){
 		sum += i_freqs[j];
@@ -139,7 +138,7 @@ void Host::validate_i_freq(){
 	}
 }
 
-void Host::print_summary(){
+void Host::print_summary() const {
 	std::cout << (unsigned)moi << "\n";
 	std::cout << "mean_fitness: " << mean_fitness << "\n";
 	for(const auto& c: i_clones) {

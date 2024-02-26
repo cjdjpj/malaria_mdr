@@ -20,6 +20,6 @@ public:
 	void reset();
 
 	//debug
-	void validate_i_freq();
-	void print_summary();
+	void validate_i_freq() const;
+	void print_summary() const;
 };
