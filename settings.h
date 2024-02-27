@@ -25,6 +25,6 @@ enum drug {AS = 0, LM, AQ, PPQ, MQ, CQ, AL, ASAQ, DHAPPQ, ASMQ, NO_DRUG = 99};
 
 #define CYCLING_MEAN_FITNESS 0.05
 
-#define DTS_CYCLING
+#define DTS_SINGLE
 
 #define DEBUG_DRUG

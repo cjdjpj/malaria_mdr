@@ -74,8 +74,6 @@ int main(){
 			    generational_g_freqs[gen][c] += host_population[i].i_freqs[c] * (host_population[i].mean_fitness / total_fitness);
 			}
 		}
-
-		//equalize global frequency
 		long double total_freq = 0.0;
 		for(const auto& c : g_clones){
 			total_freq += generational_g_freqs[gen][c];
@@ -106,8 +104,8 @@ int main(){
 		std::cout << "\nGEN " << gen << "\n";
 
 		//PRINT GLOBAL ALLELE FREQUENCIES
-		#ifdef DEBUG_G_ALLELE
-		std::cout << "-------GLOBAL ALLELE FREQUENCIES-------\n";
+		#ifdef DEBUG_G_CLONE
+		std::cout << "-------GLOBAL CLONE FREQUENCIES-------\n";
 		for(const auto& c: g_clones){
 			if(are_same(generational_g_freqs[gen][c],0)){
 				continue;

@@ -13,7 +13,7 @@ plt.ylim(0,1)
 print(data)
 
 surviving_clones = []
-for i, column in enumerate(data.columns[1:], start=1):
+for i, column in enumerate(data.columns[1:], start=0):
     line = plt.plot(data['Generation'], data[column], alpha=0.6, label=f'Clone_{i}')[0]
     if any(data[column].iloc[-1:] > -1):
         surviving_clones.append(i)

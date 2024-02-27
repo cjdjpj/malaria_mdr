@@ -13,4 +13,4 @@ last_row = data[-1]
 print("Surviving clones (at last gen):")
 for clone_num, frequency in enumerate(last_row):
     if float(frequency) > 0.02:
-        print(f"Clone {clone_num + 1}: {frequency}")
+        print(f"Clone {clone_num}: {frequency}")
