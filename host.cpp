@@ -12,10 +12,10 @@ Host::Host(){
 	long double i_freqs[NUM_UNIQUE_CLONES] = {};
 }
 
-void Host::choose_clones(const long double global_frequencies[], int total_clones){
+void Host::choose_clones(const long double g_freqs[NUM_UNIQUE_CLONES], int total_clones){
 	for(int i=0; i<moi; i++){
 		//select clones
-		int clone_injected = weighted_dice_roll(global_frequencies, total_clones);
+		int clone_injected = weighted_dice_roll(g_freqs, total_clones);
 
 		//add to i_clones
 		i_clones.insert(clone_injected);
@@ -28,7 +28,7 @@ void Host::choose_clones(const long double global_frequencies[], int total_clone
 void Host::choose_drugs(int generation, int clone_id , const long double generational_mean_fitness[NUM_GENERATIONS]){
 
 	#ifdef DTS_SINGLE
-	host_drug = LM;
+	host_drug = AL;
 	#endif
 
 	#ifdef DTS_MFT
@@ -61,17 +61,17 @@ void Host::choose_drugs(int generation, int clone_id , const long double generat
 }
 
 
-void Host::naturally_select(const long double fitness_data[NUM_UNIQUE_CLONES][NUM_DRUGS]){
+void Host::naturally_select(const long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]){
 	if(!moi){
 		mean_fitness = 1.0;
 		return;
 	}
 	mean_fitness = 0.0;
 	for(const auto& c: i_clones){
-		mean_fitness += fitness_data[c][host_drug] * i_freqs[c];
+		mean_fitness += clone_drug_fitness[c][host_drug] * i_freqs[c];
 	}
 	for(const auto& c: i_clones){
-		i_freqs[c] = (fitness_data[c][host_drug] * i_freqs[c])/mean_fitness;
+		i_freqs[c] = (clone_drug_fitness[c][host_drug] * i_freqs[c])/mean_fitness;
 	}
 }
 

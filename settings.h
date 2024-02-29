@@ -5,7 +5,7 @@
 
 #define R_NAUGHT 3
 
-#define NUM_GENERATIONS 300
+#define NUM_GENERATIONS 100
 
 #define NUM_HOSTS 300000
 
@@ -23,8 +23,8 @@
 
 enum drug {AS = 0, LM, AQ, PPQ, MQ, CQ, AL, ASAQ, DHAPPQ, ASMQ, NO_DRUG = 99};
 
-#define CYCLING_MEAN_FITNESS 0.05
+#define CYCLING_MEAN_FITNESS 0.1
 
-#define DTS_SINGLE
+#define DTS_MFT
 
 #define DEBUG_DRUG

@@ -24,9 +24,7 @@ int main(){
 	//set initial conditions
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
 	g_clones.insert(0);
-	g_clones.insert(3);
-	generational_g_freqs[0][0] = 0.5;
-	generational_g_freqs[0][3] = 0.5;
+	generational_g_freqs[0][0] = 1.0;
 
 
 	//begin sim
