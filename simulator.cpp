@@ -95,7 +95,7 @@ int main(){
 		}
 
 		//find new poisson mean
-		generational_poisson_mean[gen] = R_NAUGHT * (1-generational_mean_fitness[gen]);
+		generational_poisson_mean[gen] = R_NAUGHT * generational_mean_fitness[gen] * (1-num_infected/NUM_HOSTS);
 
 		//********************debugging********************//
 

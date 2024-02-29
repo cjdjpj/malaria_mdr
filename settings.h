@@ -3,7 +3,7 @@
 //transmission
 #define STARTING_POISSON_MEAN 2
 
-#define R_NAUGHT 3
+#define R_NAUGHT 4
 
 #define NUM_GENERATIONS 100
 

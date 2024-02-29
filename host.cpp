@@ -62,11 +62,10 @@ void Host::choose_drugs(int generation, int clone_id , const long double generat
 
 
 void Host::naturally_select(const long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]){
+	mean_fitness = 0.0;
 	if(!moi){
-		mean_fitness = 1.0;
 		return;
 	}
-	mean_fitness = 0.0;
 	for(const auto& c: i_clones){
 		mean_fitness += clone_drug_fitness[c][host_drug] * i_freqs[c];
 	}
