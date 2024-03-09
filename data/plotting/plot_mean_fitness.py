@@ -5,7 +5,6 @@ csv_file_path = '../mean_fitness.csv'
 data = pd.read_csv(csv_file_path, header = None)
 
 plt.figure(figsize=(20, 10))
-plt.ylim(0,1)
 
 data = data.iloc[1:]
 

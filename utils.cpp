@@ -7,14 +7,13 @@ int weighted_dice_roll(const long double weights[], int num_sides) {
     if (num_sides <= 0) {
            throw std::invalid_argument("Number of sides must > 0");
     }
-    uint32_t resolution = 4294967295;
-    // Use arc4random_uniform to generate a random number in the range [0, totalWeight).
-    uint32_t random_number = arc4random_uniform(resolution);
+    // Use arc4random_uniform to generate a random numbe
+    uint32_t random_number = arc4random();
     long double current_weight = 0;
     
     for (int k=0; k<num_sides; ++k) {
         current_weight += weights[k];
-        if (random_number < current_weight * resolution) {
+        if (random_number < current_weight * 4294967295) {
             return k; 
         }
     }
@@ -24,9 +23,8 @@ int weighted_dice_roll(const long double weights[], int num_sides) {
 }
 
 bool weighted_flip(double prob){
-    uint32_t resolution = 4294967295;
-    uint32_t random_number = arc4random_uniform(resolution);
-    if(random_number < prob * resolution){
+    uint32_t random_number = arc4random();
+    if(random_number < prob * 4294967295){
         return true;
     }
     else{

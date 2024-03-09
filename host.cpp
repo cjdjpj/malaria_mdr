@@ -28,7 +28,7 @@ void Host::choose_clones(const long double g_freqs[NUM_UNIQUE_CLONES], int total
 void Host::choose_drugs(int generation, int clone_id , const long double generational_mean_fitness[NUM_GENERATIONS]){
 
 	#ifdef DTS_SINGLE
-	host_drug = AL;
+	host_drug = AQ;
 	#endif
 
 	#ifdef DTS_MFT

@@ -5,6 +5,7 @@
 #include "simulator.h"
 
 #include <iostream>
+#include <cmath>
 
 int main(){
 
@@ -25,8 +26,6 @@ int main(){
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
 	g_clones.insert(0);
 	generational_g_freqs[0][0] = 1.0;
-
-
 	//begin sim
 	int gen = 0;
 	while(gen<NUM_GENERATIONS-1){
@@ -95,8 +94,12 @@ int main(){
 		}
 
 		//find new poisson mean
-		generational_poisson_mean[gen] = R_NAUGHT * generational_mean_fitness[gen] * (1-num_infected/NUM_HOSTS);
-
+		// generational_poisson_mean[gen] = R_NAUGHT * ((long double)num_infected/NUM_HOSTS) * (1-((long double)num_infected/NUM_HOSTS));
+		long double prop_infected_ng = (R_NAUGHT * generational_mean_fitness[gen])* 1-(num_infected/NUM_HOSTS);
+		if(prop_infected_ng <= 0 || 1-prop_infected_ng < 1/exp(20)){
+			break;
+		}
+		generational_poisson_mean[gen] = -log(1-prop_infected_ng);
 		//********************debugging********************//
 
 		std::cout << "\nGEN " << gen << "\n";
@@ -137,9 +140,9 @@ int main(){
 
 	}
 	//export data
-	write_2d_array_to_csv_clonefreq("../data/g_freqs.csv", generational_g_freqs);
-	write_array_to_csv("../data/mean_fitness.csv", generational_mean_fitness);
-	write_array_to_csv("../data/poisson_mean.csv", generational_poisson_mean);
+	write_2d_array_to_csv_clonefreq("../data/g_freqs.csv", gen, generational_g_freqs);
+	write_array_to_csv("../data/mean_fitness.csv", gen, generational_mean_fitness);
+	write_array_to_csv("../data/poisson_mean.csv", gen, generational_poisson_mean);
 
 	//cleanup
 	delete[] host_population;
