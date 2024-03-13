@@ -12,7 +12,7 @@
 //genetics
 #define LAMBDA 0.000001 //mutation rate
 
-#define THETA 0.7 //recombination rate
+#define THETA 0.2 //recombination rate
 
 #define NUM_LOCI 4
 
@@ -24,8 +24,6 @@
 enum drug {AS = 0, LM, AQ, PPQ, MQ, CQ, AL, ASAQ, DHAPPQ, ASMQ, NO_DRUG = 99};
 
 #define DTS_CYCLING
-
-#define CYCLING_MEAN_FITNESS 0.1
 
 #define CYCLING_DRUG1 AS
 #define CYCLING_DRUG2 CQ
