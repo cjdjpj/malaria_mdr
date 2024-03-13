@@ -15,6 +15,7 @@ int main(){
 	//read in drug-clone fitness values
 	long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS] = {};
 	read_csv_to_2d_array_drug("../data/fitness_values.csv", clone_drug_fitness);
+	long double clone_drug_avg_fitness[] = {0.535,0.252625,0.221125,0.101,0.055,0.50475,0.130375,0.1115625,0.0495,0.0275};
 
 	//global clone data collection
 	long double generational_poisson_mean[NUM_GENERATIONS] = {};
@@ -25,7 +26,11 @@ int main(){
 	//set initial conditions
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
 	g_clones.insert(0);
-	generational_g_freqs[0][0] = 1.0;
+	g_clones.insert(4);
+	g_clones.insert(2);
+	generational_g_freqs[0][0] = 1.0/3;
+	generational_g_freqs[0][4] = 1.0/3;
+	generational_g_freqs[0][2] = 1.0/3;
 	//begin sim
 	int gen = 0;
 	while(gen<NUM_GENERATIONS-1){
@@ -45,7 +50,7 @@ int main(){
 
 			host_population[i].choose_clones(generational_g_freqs[gen], NUM_UNIQUE_CLONES);
 
-			host_population[i].choose_drugs(gen, i, generational_mean_fitness);
+			host_population[i].choose_drugs(gen, i, clone_drug_avg_fitness, generational_mean_fitness);
 
 			host_population[i].naturally_select(clone_drug_fitness);
 
@@ -95,11 +100,15 @@ int main(){
 
 		//find new poisson mean
 		// generational_poisson_mean[gen] = R_NAUGHT * ((long double)num_infected/NUM_HOSTS) * (1-((long double)num_infected/NUM_HOSTS));
-		long double prop_infected_ng = (R_NAUGHT * generational_mean_fitness[gen])* 1-(num_infected/NUM_HOSTS);
-		if(prop_infected_ng <= 0 || 1-prop_infected_ng < 1/exp(20)){
+		generational_poisson_mean[gen] = R_NAUGHT * generational_mean_fitness[gen] * (1-(num_infected/NUM_HOSTS));
+		if(generational_poisson_mean[gen] == 0 || generational_poisson_mean[gen] > 3){
 			break;
 		}
-		generational_poisson_mean[gen] = -log(1-prop_infected_ng);
+		// long double prop_infected_ng = (R_NAUGHT * generational_mean_fitness[gen])* 1-(num_infected/NUM_HOSTS);
+		// if(prop_infected_ng <= 0 || 1-prop_infected_ng < 1/exp(30)){
+		// 	break;
+		// }
+		// generational_poisson_mean[gen] = -log(1-prop_infected_ng);
 		//********************debugging********************//
 
 		std::cout << "\nGEN " << gen << "\n";
@@ -128,7 +137,8 @@ int main(){
 		//PRINT DRUG
 		#ifdef DEBUG_DRUG
 			#ifdef DTS_CYCLING
-			std::cout << "DRUG IN CIRCULATION: " << (int)host_population[5].host_drug << "\n";
+			std::string drug_names[] = {"AS", "LM", "AQ", "PPQ", "MQ", "CQ", "AL", "ASAQ", "DHAPPQ", "ASMQ"};
+			std::cout << "DRUG IN CIRCULATION: " << drug_names[(int)host_population[5].host_drug] << "\n";
 			#endif
 		#endif
 

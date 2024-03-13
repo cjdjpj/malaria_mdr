@@ -25,36 +25,38 @@ void Host::choose_clones(const long double g_freqs[NUM_UNIQUE_CLONES], int total
 	}
 }
 
-void Host::choose_drugs(int generation, int clone_id , const long double generational_mean_fitness[NUM_GENERATIONS]){
+void Host::choose_drugs(int generation, int clone_id , const long double avg_fitness_data[NUM_DRUGS], const long double generational_mean_fitness[NUM_GENERATIONS]){
 
 	#ifdef DTS_SINGLE
-	host_drug = AQ;
+	host_drug = SINGLE_DRUG;
 	#endif
 
 	#ifdef DTS_MFT
 	if(clone_id < NUM_UNIQUE_CLONES/3){
-		host_drug = LM;
+		host_drug = MFT_DRUG1;
 	}
 	else if(clone_id >= NUM_UNIQUE_CLONES/3 && clone_id < 2*NUM_UNIQUE_CLONES/3){
-		host_drug = AQ;
+		host_drug = MFT_DRUG2;
 	}
 	else{
-		host_drug = CQ;
+		host_drug = MFT_DRUG3;
 	}
 	#endif
 
 	#ifdef DTS_CYCLING
 	if(generation == 0){
-		host_drug = AS;
+		host_drug = CYCLING_DRUG1;
 		return;
 	}
-	if(generation % 30 == 0){
-		// generational_mean_fitness[generation] > CYCLING_MEAN_FITNESS
-		int n = (int)host_drug;
-		n++;
-		host_drug = (drug)n;
-		if(host_drug == ASAQ){ 
-			host_drug = AS;
+	if(generational_mean_fitness[generation] > avg_fitness_data[(int)host_drug]){
+		if(host_drug == CYCLING_DRUG1){
+			host_drug = CYCLING_DRUG2;
+		}
+		else if(host_drug == CYCLING_DRUG2){
+			host_drug = CYCLING_DRUG3;
+		}
+		else{
+			host_drug = CYCLING_DRUG1;
 		}
 	}
 	#endif

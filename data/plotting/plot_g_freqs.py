@@ -18,21 +18,23 @@ custom_legend_titles = ['KNY--C1', 'KNY--Y1', 'KYY--C1', 'KYY--Y1',
                         'TNY--C1', 'TNY--Y1', 'TYY--C1', 'TYY--Y1', 
                         'TNF--C1', 'TNF--Y1', 'TYF--C1', 'TYF--Y1']
 
+# Assign custom legend titles to the DataFrame columns
+data.columns = ['Generation'] + custom_legend_titles
 
-for i, column in enumerate(data.columns[1:], start=0):
-    custom_name = custom_legend_titles[i]
-    line = plt.plot(data['Generation'], data[column], alpha=0.6, label=custom_name)[0]
-    
-    if data[column].iloc[-1] > 0:
-        surviving_clones.append(custom_name)
+threshold = 0.01
+
+for column in custom_legend_titles:
+    if (data[column] > threshold).any():
+        surviving_clones.append(column)
+
+for column in surviving_clones:
+    line = plt.plot(data['Generation'], data[column], alpha=0.6, label=column)[0]
 
 plt.xlabel('Generation')
 plt.ylabel('Global Frequency')
 plt.title('Global Frequency of Malaria Clones over generations')
 
-plt.legend(title='Surviving Clones', loc='upper right', bbox_to_anchor=(1.12, 1.02),
-           handles=[line for line in plt.gca().get_lines() if line.get_label() in surviving_clones],
-           labels=custom_legend_titles)
+plt.legend(title='Surviving Clones', loc='upper right', bbox_to_anchor=(1.12, 1.02))
 
 plt.grid(True)
 plt.show()
