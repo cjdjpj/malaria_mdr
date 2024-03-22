@@ -18,11 +18,11 @@ Here I will describe each step in the order that it occurs in the model.
 	- **Adaptive cycling strategy**: all hosts receive single drug, until mean fitness of population is greater than average fitness of all clones to current drug
 
 #### (2) Selection
-Each host is assigned a *mean fitness* $m$ which is equal to
-$$\sum^I_{i \in I} f_i \times w_i$$
-where $f_i$ is the fitness of clone under the hosts current drug $i$ and $w_i$ is the frequency of clone $i$ in the host. ($m=0$ if host uninfected)
-The new frequency of each clone ($w_i'$) is equal to
-$$w_i' = \frac{f_i \times w_i}{m}$$
+Each host is assigned a mean fitness $m$ which is equal to
+$$\sum^C_{c \in C} f_c \times w_c$$
+where $C$ is set of all clones the host is infected with. $f_c$ is the fitness of the clone $c$ under the current drug and $w_c$ is its frequency ($m=0$ if host uninfected).
+The new frequency of each clone ($w_c'$) is equal to
+$$w_c' = \frac{f_c \times w_c}{m}$$
 
 Fitness values are drawn from Appendix 2 of Nguyen et al. 2023
 
@@ -34,13 +34,13 @@ Only a proportion $\theta$ of the population undergoes recombination. ($\theta$ 
 The relative frequency of each allele within the host is calculated, then the new frequency of all recombinants is the product of the frequencies of their alleles.
 
 #### (4) Census
-The new global frequency of each clone $F_i$ is collected with each host's contribution weighted according to their mean fitness. That is, for host $j$, clone $i$ and mean fitness $m$:
-$$F_i = \sum^J_{j \in J} f_{ji} \times \frac{m}{m_t}$$
+The new global frequency of each clone $F_c$ is collected with each host's contribution weighted according to their mean fitness. That is, for host $j$ and mean fitness $m$:
+$$F_c = \sum^J_{j \in J} f_{jc} \times \frac{m}{m_t}$$
 where $m_t$ is the total mean fitness of all hosts in the population:
 $$m_t = \sum_{j \in J}^{J} m$$
 
-The poisson mean ($\lambda$)in the next generation is calculated.
-$$\lambda_{t+1} = R_0 \times \text{global mean fitness} \times \text{proportion of hosts uninfected}$$
+The poisson mean in the next generation ($\lambda'$) is calculated.
+$$\lambda' = R_0 \times \text{global mean fitness} \times \text{proportion of hosts uninfected}$$
 
 #### (5) Mutation
 In the model, mutations occur in the global pool of clones rather than within hosts. This means mutants do not recombine unless selected by chance by a host in the next generation.
@@ -48,6 +48,6 @@ In the model, mutations occur in the global pool of clones rather than within ho
 We assume no backwards mutations and 1 allele is mutated (if not already mutant) for each mutant clone. The initial frequency of a single mutant is $10^{-6}$ which is also the parameter assumed in Hastings 2002.
 
 The frequency of each mutant is:
-$$f_{\text{mutant}, t+1} = \lambda \times f_{\text{parent}, t}$$
+$$f_{\text{mutant}}' = \lambda \times f_{\text{parent}}$$
 and the original parent clone has new frequency:
-$$f_{\text{parent},t+1} = f_{\text{parent},t} \times (1-\lambda \times \text{num mutants})$$
+$$f_{\text{parent}}' = f_{\text{parent}} \times (1-\lambda \times \text{num mutants})$$
