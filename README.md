@@ -50,4 +50,4 @@ We assume no backwards mutations and 1 allele is mutated (if not already mutant)
 The frequency of each mutant is:
 $$f_{\text{mutant}}' = \lambda \times f_{\text{parent}}$$
 and the original parent clone has new frequency:
-$$f_{\text{parent}}' = f_{\text{parent}} - f_{\text{parent}} \times \lambda \times \text{num mutants})$$
+$$f_{\text{parent}}' = f_{\text{parent}} - f_{\text{parent}} \times \lambda \times \text{num mutants}$$
