@@ -21,7 +21,7 @@ Here I will describe each step in the order that it occurs in the model.
 Each host is assigned a mean fitness $m$ which is equal to
 $$m = \sum^C_{c \in C} f_c \times w_c$$
 where $C$ is set of all clones the host is infected with. $w_c$ is the fitness of the clone $c$ under the current drug and $f_c$ is its frequency ($m=0$ if host uninfected).
-The new frequency of each clone ($w_c'$) is equal to
+The new frequency of each clone ($f_c'$) is equal to
 $$f_c' = \frac{f_c \times w_c}{m}$$
 
 Fitness values are drawn from Appendix 2 of Nguyen et al. 2023
