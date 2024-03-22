@@ -20,7 +20,7 @@ Here I will describe each step in the order that it occurs in the model.
 #### (2) Selection
 Each host is assigned a mean fitness $m$ which is equal to
 $$m = \sum^C_{c \in C} f_c \times w_c$$
-where $C$ is set of all clones the host is infected with. $f_c$ is the fitness of the clone $c$ under the current drug and $w_c$ is its frequency ($m=0$ if host uninfected).
+where $C$ is set of all clones the host is infected with. $w_c$ is the fitness of the clone $c$ under the current drug and $f_c$ is its frequency ($m=0$ if host uninfected).
 The new frequency of each clone ($w_c'$) is equal to
 $$w_c' = \frac{f_c \times w_c}{m}$$
 
