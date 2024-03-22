@@ -3,9 +3,9 @@
 //transmission
 #define STARTING_POISSON_MEAN 0.4
 
-#define R_NAUGHT 4
+#define R_NAUGHT 5
 
-#define NUM_GENERATIONS 100
+#define NUM_GENERATIONS 25
 
 #define NUM_HOSTS 300000
 
