@@ -35,9 +35,9 @@ The relative frequency of each allele within the host is calculated, then the ne
 
 #### (4) Census
 The new global frequency of each clone $F_c$ is collected with each host's contribution weighted according to their mean fitness. That is, for host $j$ and mean fitness $m$:
-$$F_c = \sum^J_{j \in J} f_{jc} \times \frac{m}{m_t}$$
-where $m_t$ is the total mean fitness of all hosts in the population:
-$$m_t = \sum_{j \in J}^{J} m$$
+$$F_c = \sum^J_{j \in J} f_{jc} \times \frac{m}{M}$$
+where $M$ is the total fitness of all hosts in the population:
+$$M = \sum_{j \in J}^{J} m_j$$
 
 The poisson mean in the next generation ($\lambda'$) is calculated.
 $$\lambda' = R_0 \times \text{global mean fitness} \times \text{proportion of hosts uninfected}$$
