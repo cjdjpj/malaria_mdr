@@ -27,15 +27,19 @@ void Host::choose_clones(const long double g_freqs[NUM_UNIQUE_CLONES], int total
 
 void Host::choose_drugs(int generation, int clone_id , const long double avg_fitness_data[NUM_DRUGS], const long double generational_mean_fitness[NUM_GENERATIONS]){
 
+	if(clone_id > NUM_HOSTS * TREATED_PROP){
+		host_drug = NO_DRUG;
+		return;
+	}
 	#ifdef DTS_SINGLE
 	host_drug = SINGLE_DRUG;
 	#endif
 
 	#ifdef DTS_MFT
-	if(clone_id < NUM_UNIQUE_CLONES/3){
+	if(clone_id < NUM_HOSTS/3){
 		host_drug = MFT_DRUG1;
 	}
-	else if(clone_id >= NUM_UNIQUE_CLONES/3 && clone_id < 2*NUM_UNIQUE_CLONES/3){
+	else if(clone_id >= NUM_HOSTS/3 && clone_id < 2*NUM_HOSTS/3){
 		host_drug = MFT_DRUG2;
 	}
 	else{

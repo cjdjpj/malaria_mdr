@@ -5,7 +5,6 @@
 #include "simulator.h"
 
 #include <iostream>
-#include <cmath>
 
 int main(){
 
@@ -14,8 +13,17 @@ int main(){
 
 	//read in drug-clone fitness values
 	long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS] = {};
-	read_csv_to_2d_array_drug("../data/fitness_values.csv", clone_drug_fitness);
-	long double clone_drug_avg_fitness[] = {0.535,0.252625,0.221125,0.101,0.055,0.50475,0.130375,0.1115625,0.0495,0.0275};
+	read_csv_to_2d_array_drug("../data/fitness_values_full.csv", clone_drug_fitness);
+
+	//find avg fitness
+	long double clone_drug_avg_fitness[NUM_UNIQUE_CLONES] = {};
+	for(int i=0; i<NUM_DRUGS; i++){
+		long double sum = 0.0;
+		for(int j=0; j<NUM_UNIQUE_CLONES; j++){
+			sum += clone_drug_fitness[j][i];
+		}
+		clone_drug_avg_fitness[i] = sum/NUM_UNIQUE_CLONES;
+	}
 
 	//global clone data collection
 	long double generational_poisson_mean[NUM_GENERATIONS] = {};
@@ -95,16 +103,12 @@ int main(){
 		}
 
 		//find new poisson mean
-		// generational_poisson_mean[gen] = R_NAUGHT * ((long double)num_infected/NUM_HOSTS) * (1-((long double)num_infected/NUM_HOSTS));
 		generational_poisson_mean[gen] = R_NAUGHT * generational_mean_fitness[gen] * (1-(num_infected/NUM_HOSTS));
-		if(generational_poisson_mean[gen] == 0 || generational_poisson_mean[gen] > 3){
+		#ifdef TERMINATE_WHEN_ENDEMIC_OR_ELIMINATED
+		if(generational_poisson_mean[gen] == 0 || generational_poisson_mean[gen] > 4.7){ //99% prevalence
 			break;
 		}
-		// long double prop_infected_ng = (R_NAUGHT * generational_mean_fitness[gen])* 1-(num_infected/NUM_HOSTS);
-		// if(prop_infected_ng <= 0 || 1-prop_infected_ng < 1/exp(30)){
-		// 	break;
-		// }
-		// generational_poisson_mean[gen] = -log(1-prop_infected_ng);
+		#endif
 		//********************debugging********************//
 
 		std::cout << "\nGEN " << gen << "\n";
