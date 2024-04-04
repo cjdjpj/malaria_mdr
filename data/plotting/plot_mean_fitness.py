@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 csv_file_path = '../mean_fitness.csv'
 data = pd.read_csv(csv_file_path, header = None)
 
-plt.figure(figsize=(20, 10))
-
 data = data.iloc[1:]
 
 print(data)

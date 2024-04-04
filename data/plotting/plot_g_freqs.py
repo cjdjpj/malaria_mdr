@@ -7,7 +7,6 @@ data = pd.read_csv(csv_file_path, header=None)
 data = data.reset_index()
 data.rename(columns={'index': 'Generation'}, inplace=True)
 
-plt.figure(figsize=(20, 10))
 plt.ylim(0, 1)
 
 print(data)
@@ -32,10 +31,9 @@ custom_legend_titles = [
     'TYFYFC1', 'TYFYFC2', 'TYFYFY1', 'TYFYFY2'
 ]
 
-# Assign custom legend titles to the DataFrame columns
 data.columns = ['Generation'] + custom_legend_titles
 
-threshold = 0.01
+threshold = 0.005
 
 for column in custom_legend_titles:
     if (data[column] > threshold).any():
@@ -48,7 +46,7 @@ plt.xlabel('Generation')
 plt.ylabel('Global Frequency')
 plt.title('Global Frequency of Malaria Clones over generations')
 
-plt.legend(title='Surviving Clones', loc='upper right', bbox_to_anchor=(1.12, 1.02))
+plt.legend(title='Surviving Clones', loc='upper right')
 
 plt.grid(True)
 plt.show()

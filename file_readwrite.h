@@ -19,7 +19,7 @@ void read_csv_to_2d_array_drug(std::string file_path, long double data[NUM_UNIQU
     }
 }
 
-void write_2d_array_to_csv_clonefreq(std::string file_path, int generation, const long double data[][NUM_UNIQUE_CLONES]) {
+void write_2d_array_to_csv(std::string file_path, int generation, const long double data[][NUM_UNIQUE_CLONES]) {
     std::ofstream file(file_path);
     
     if (!file.is_open()) {

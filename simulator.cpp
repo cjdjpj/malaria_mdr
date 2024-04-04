@@ -34,7 +34,9 @@ int main(){
 	//set initial conditions
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
 	g_clones.insert(0);
-	generational_g_freqs[0][0] = 1.0/1;
+	g_clones.insert(32);
+	generational_g_freqs[0][0] = 1.0/2;
+	generational_g_freqs[0][32] = 1.0/2;
 	int gen = 0;
 
 	//sim start
@@ -68,7 +70,7 @@ int main(){
 		g_clones.clear();
 		gen++; //store data into next gen.
 
-		//find average (weighted) clone freqs
+		//find average (weighted by mean fitness) clone freqs
 		long double total_fitness = 0.0;
 		for(int i=0; i<NUM_HOSTS; i++){
 			total_fitness += host_population[i].mean_fitness;
@@ -78,7 +80,7 @@ int main(){
 		for(int i=0; i<NUM_HOSTS; i++){
 			for (const auto& c: host_population[i].i_clones) {
 				g_clones.insert(c);
-			    generational_g_freqs[gen][c] += host_population[i].i_freqs[c] * (host_population[i].mean_fitness / total_fitness);
+			    generational_g_freqs[gen][c] += host_population[i].i_freqs[c] * host_population[i].mean_fitness;
 			}
 		}
 		long double total_freq = 0.0;
@@ -105,14 +107,15 @@ int main(){
 
 		//find new poisson mean
 		generational_poisson_mean[gen] = R_NAUGHT * generational_mean_fitness[gen] * (1-(num_infected/NUM_HOSTS));
+
 		#ifdef TERMINATE_WHEN_ENDEMIC_OR_ELIMINATED
-		if(generational_poisson_mean[gen] == 0 || generational_poisson_mean[gen] > 4.7){ //99% prevalence (3 for 95%)
+		if(generational_poisson_mean[gen] == 0.0 || generational_poisson_mean[gen] > 4.7){ //99% prevalence (3 for 95%)
 			break;
 		}
 		#endif
-		//********************debugging********************//
 
-		std::cout << "\nGEN " << gen << "\n";
+		//********************debugging********************//
+		std::cout << "\nGEN: " << gen << "\n";
 
 		//PRINT GLOBAL ALLELE FREQUENCIES
 		#ifdef DEBUG_G_CLONE
@@ -138,8 +141,8 @@ int main(){
 		//PRINT DRUG
 		#ifdef DEBUG_DRUG
 			#ifdef DTS_CYCLING
-			std::string drug_names[] = {"AS", "LM", "AQ", "PPQ", "MQ", "CQ", "AL", "ASAQ", "DHAPPQ", "ASMQ"};
-			std::cout << "DRUG IN CIRCULATION: " << drug_names[(int)host_population[5].host_drug] << "\n";
+			std::string drug_names[] = {"AS", "LM", "AQ", "PPQ", "MQ", "CQ", "AL", "ASAQ", "DHAPPQ", "ASMQ", "NO_DRUG"};
+			std::cout << "CURRENT CYCLING DRUG: " << drug_names[(int)host_population[5].host_drug] << "\n";
 			#endif
 		#endif
 
@@ -151,7 +154,7 @@ int main(){
 
 	}
 	//export data
-	write_2d_array_to_csv_clonefreq("../data/g_freqs.csv", gen, generational_g_freqs);
+	write_2d_array_to_csv("../data/g_freqs.csv", gen, generational_g_freqs);
 	write_array_to_csv("../data/mean_fitness.csv", gen, generational_mean_fitness);
 	write_array_to_csv("../data/poisson_mean.csv", gen, generational_poisson_mean);
 
