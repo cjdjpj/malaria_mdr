@@ -35,8 +35,9 @@ int main(){
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
 	g_clones.insert(0);
 	generational_g_freqs[0][0] = 1.0/1;
-	//begin sim
 	int gen = 0;
+
+	//sim start
 	while(gen<NUM_GENERATIONS-1){
 
 		//*****for hosts: transmission, drug distribution, selection, recombination*****//
@@ -52,7 +53,7 @@ int main(){
 				num_infected++;
 			}
 
-			host_population[i].choose_clones(generational_g_freqs[gen], NUM_UNIQUE_CLONES);
+			host_population[i].choose_clones(generational_g_freqs[gen]);
 
 			host_population[i].choose_drugs(gen, i, clone_drug_avg_fitness, generational_mean_fitness);
 
@@ -105,7 +106,7 @@ int main(){
 		//find new poisson mean
 		generational_poisson_mean[gen] = R_NAUGHT * generational_mean_fitness[gen] * (1-(num_infected/NUM_HOSTS));
 		#ifdef TERMINATE_WHEN_ENDEMIC_OR_ELIMINATED
-		if(generational_poisson_mean[gen] == 0 || generational_poisson_mean[gen] > 4.7){ //99% prevalence
+		if(generational_poisson_mean[gen] == 0 || generational_poisson_mean[gen] > 4.7){ //99% prevalence (3 for 95%)
 			break;
 		}
 		#endif

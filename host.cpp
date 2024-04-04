@@ -12,10 +12,10 @@ Host::Host(){
 	long double i_freqs[NUM_UNIQUE_CLONES] = {};
 }
 
-void Host::choose_clones(const long double g_freqs[NUM_UNIQUE_CLONES], int total_clones){
+void Host::choose_clones(const long double g_freqs[NUM_UNIQUE_CLONES]){
 	for(int i=0; i<moi; i++){
 		//select clones
-		int clone_injected = weighted_dice_roll(g_freqs, total_clones);
+		int clone_injected = weighted_dice_roll(g_freqs, NUM_UNIQUE_CLONES);
 
 		//add to i_clones
 		i_clones.insert(clone_injected);
@@ -31,6 +31,7 @@ void Host::choose_drugs(int generation, int clone_id , const long double avg_fit
 		host_drug = NO_DRUG;
 		return;
 	}
+
 	#ifdef DTS_SINGLE
 	host_drug = SINGLE_DRUG;
 	#endif
