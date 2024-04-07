@@ -4,13 +4,7 @@
 
 #include <iostream>
 
-Host::Host(){
-	moi = NAN;
-	mean_fitness = NAN;
-	host_drug = NO_DRUG;
-	std::unordered_set<uint8_t> i_clones = {};
-	long double i_freqs[NUM_UNIQUE_CLONES] = {};
-}
+Host::Host() : moi(NAN), mean_fitness(NAN), host_drug(NO_DRUG), i_clones(), i_freqs{}{}
 
 void Host::choose_clones(const long double g_freqs[NUM_UNIQUE_CLONES]){
 	for(int i=0; i<moi; i++){
@@ -87,13 +81,13 @@ void Host::recombine(){
 		return;
 	}
 	//determine recombinants
-	std::unordered_set<uint8_t> recombinants = {};
+	std::unordered_set<uint8_t> recombinants{};
 	std::vector<uint8_t> vec_i_clones(i_clones.begin(), i_clones.end());
-	find_bit_combinations(vec_i_clones, recombinants);
+	find_bit_combinations_allpairs(vec_i_clones, recombinants);
 
 	//determine freq of each allele
-    long double allele_freq0[NUM_LOCI] = {};
-    long double allele_freq1[NUM_LOCI] = {};
+    long double allele_freq0[NUM_LOCI]{};
+    long double allele_freq1[NUM_LOCI]{};
 
     for(int i=0; i<NUM_LOCI; i++){
         long double sum = 0.0;
@@ -127,9 +121,11 @@ void Host::recombine(){
 void Host::reset(){
 	moi = NAN;
 	mean_fitness = NAN;
+
 	#ifndef DTS_CYCLING
 		host_drug = NO_DRUG;
 	#endif
+
 	std::fill(i_freqs, i_freqs + NUM_UNIQUE_CLONES, 0.0);
 	i_clones.clear();
 }

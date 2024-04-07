@@ -9,14 +9,14 @@
 int main(){
 
 	//initialize hosts
-	Host* host_population = new Host[NUM_HOSTS];
+	Host* host_population = new Host[NUM_HOSTS]{};
 
 	//read in drug-clone fitness values
-	long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS] = {};
+	long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]{};
 	read_csv_to_2d_array_drug("../data/fitness_values_full.csv", clone_drug_fitness);
 
 	//find avg fitness
-	long double clone_drug_avg_fitness[NUM_UNIQUE_CLONES] = {};
+	long double clone_drug_avg_fitness[NUM_UNIQUE_CLONES]{};
 	for(int i=0; i<NUM_DRUGS; i++){
 		long double sum = 0.0;
 		for(int j=0; j<NUM_UNIQUE_CLONES; j++){
@@ -26,18 +26,17 @@ int main(){
 	}
 
 	//global clone data collection
-	long double generational_poisson_mean[NUM_GENERATIONS] = {};
-	long double generational_g_freqs[NUM_GENERATIONS][NUM_UNIQUE_CLONES] = {};
-	long double generational_mean_fitness[NUM_GENERATIONS] = {};
-	std::unordered_set<uint8_t> g_clones = {};
+	long double generational_poisson_mean[NUM_GENERATIONS]{};
+	long double generational_g_freqs[NUM_GENERATIONS][NUM_UNIQUE_CLONES]{};
+	long double generational_mean_fitness[NUM_GENERATIONS]{};
+	std::unordered_set<uint8_t> g_clones{};
 
 	//set initial conditions
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
 	g_clones.insert(0);
-	g_clones.insert(32);
-	generational_g_freqs[0][0] = 1.0/2;
-	generational_g_freqs[0][32] = 1.0/2;
+	generational_g_freqs[0][0] = 1.0/1;
 	int gen = 0;
+	int num_infected = 0;
 
 	//sim start
 	while(gen<NUM_GENERATIONS-1){
@@ -46,24 +45,24 @@ int main(){
 		poisson_generator.reset();
 		poisson_generator.param(std::poisson_distribution<>::param_type(generational_poisson_mean[gen]));
 		num_infected = 0;
-		for(int i=0; i<NUM_HOSTS; i++){
-			host_population[i].reset();
+		for(int h=0; h<NUM_HOSTS; h++){
+			host_population[h].reset();
 
-			host_population[i].moi = poisson_generator(rng);
+			host_population[h].moi = poisson_generator(rng);
 
-			if(host_population[i].moi){
+			if(host_population[h].moi){
 				num_infected++;
 			}
 
-			host_population[i].choose_clones(generational_g_freqs[gen]);
+			host_population[h].choose_clones(generational_g_freqs[gen]);
 
-			host_population[i].choose_drugs(gen, i, clone_drug_avg_fitness, generational_mean_fitness);
+			host_population[h].choose_drugs(gen, h, clone_drug_avg_fitness, generational_mean_fitness);
 
-			host_population[i].naturally_select(clone_drug_fitness);
+			host_population[h].naturally_select(clone_drug_fitness);
 
-			host_population[i].recombine();
+			host_population[h].recombine();
 
-			host_population[i].validate_i_freq();
+			// host_population[h].validate_i_freq();
 		}
 
 		//*****census*****//
@@ -71,16 +70,15 @@ int main(){
 		gen++; //store data into next gen.
 
 		//find average (weighted by mean fitness) clone freqs
-		long double total_fitness = 0.0;
-		for(int i=0; i<NUM_HOSTS; i++){
-			total_fitness += host_population[i].mean_fitness;
+		for(int h=0; h<NUM_HOSTS; h++){
+			generational_mean_fitness[gen] += host_population[h].mean_fitness;
 		}
-		generational_mean_fitness[gen] = total_fitness/NUM_HOSTS;
+		generational_mean_fitness[gen] /= NUM_HOSTS;
 
-		for(int i=0; i<NUM_HOSTS; i++){
-			for (const auto& c: host_population[i].i_clones) {
+		for(int h=0; h<NUM_HOSTS; h++){
+			for (const auto& c: host_population[h].i_clones) {
 				g_clones.insert(c);
-			    generational_g_freqs[gen][c] += host_population[i].i_freqs[c] * host_population[i].mean_fitness;
+			    generational_g_freqs[gen][c] += host_population[h].i_freqs[c] * host_population[h].mean_fitness;
 			}
 		}
 		long double total_freq = 0.0;
@@ -92,11 +90,10 @@ int main(){
 		}
 
 		//*****mutation*****//
-		for(auto it = g_clones.begin(); it != g_clones.end(); ++it){
-			uint8_t c = *it;
+		for(const auto& c : g_clones){
 			int num_mutants = (NUM_LOCI-std::popcount(c));
-			for(int i=0; i<NUM_LOCI; i++){
-				int current_bit = 1 << i;
+			for(int l=0; l<NUM_LOCI; l++){
+				int current_bit = 1 << l;
 				if(!(current_bit&c)){
 					generational_g_freqs[gen][(c+current_bit)] += generational_g_freqs[gen][c] * LAMBDA;
 					g_clones.insert((c+current_bit));
@@ -133,8 +130,8 @@ int main(){
 		#ifdef DEBUG_HOST
 		std::cout << "\n-------HOST SUMMARIES-------\n\n";
 		std::cout << "MOI\n";
-		for(int i=0; i<NUM_HOSTS; i++){
-			host_population[i].print_summary();
+		for(int h=0; h<NUM_HOSTS; h++){
+			host_population[h].print_summary();
 		}
 		#endif
 
@@ -142,7 +139,7 @@ int main(){
 		#ifdef DEBUG_DRUG
 			#ifdef DTS_CYCLING
 			std::string drug_names[] = {"AS", "LM", "AQ", "PPQ", "MQ", "CQ", "AL", "ASAQ", "DHAPPQ", "ASMQ", "NO_DRUG"};
-			std::cout << "CURRENT CYCLING DRUG: " << drug_names[(int)host_population[5].host_drug] << "\n";
+			std::cout << "CURRENT CYCLING DRUG: " << drug_names[(int)host_population[0].host_drug] << "\n";
 			#endif
 		#endif
 

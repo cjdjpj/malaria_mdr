@@ -7,6 +7,8 @@ data = pd.read_csv(csv_file_path, header=None)
 
 prevalences = 1 - poisson.cdf(0, data[0])
 
+print(prevalences)
+
 plt.plot(data.index, prevalences, label='Prevalence')
 
 plt.xlabel('Generation')

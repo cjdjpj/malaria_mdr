@@ -17,14 +17,11 @@ void read_csv_to_2d_array_drug(std::string file_path, long double data[NUM_UNIQU
         }
         ++row;
     }
+    file.close();
 }
 
 void write_2d_array_to_csv(std::string file_path, int generation, const long double data[][NUM_UNIQUE_CLONES]) {
     std::ofstream file(file_path);
-    
-    if (!file.is_open()) {
-        throw std::runtime_error("Could not open file for writing");
-    }
 
     for (int row=0; row<generation; row++) {
         for (int col=0; col<NUM_UNIQUE_CLONES; col++){
@@ -35,16 +32,14 @@ void write_2d_array_to_csv(std::string file_path, int generation, const long dou
             file << data[row][col] <<',';
         }
     }
+    file.close();
 }
 
 void write_array_to_csv(std::string file_path, int generation, const long double data[]) {
     std::ofstream file(file_path);
-    
-    if (!file.is_open()) {
-        throw std::runtime_error("Could not open file for writing");
-    }
 
     for (int row = 0; row < generation; row++) {
         file << std::setprecision(17) << data[row] << "\n";
     }
+    file.close();
 }

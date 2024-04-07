@@ -33,7 +33,7 @@ custom_legend_titles = [
 
 data.columns = ['Generation'] + custom_legend_titles
 
-threshold = 0.005
+threshold = 0.05
 
 for column in custom_legend_titles:
     if (data[column] > threshold).any():

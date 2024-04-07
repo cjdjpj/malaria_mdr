@@ -7,13 +7,13 @@ int weighted_dice_roll(const long double weights[], int num_sides) {
     if (num_sides <= 0) {
            throw std::invalid_argument("Number of sides must > 0");
     }
-    // Use arc4random_uniform to generate a random numbe
+    // Use arc4random_uniform to generate a random number
     uint32_t random_number = arc4random();
     long double current_weight = 0;
     
     for (int k=0; k<num_sides; ++k) {
         current_weight += weights[k];
-        if (random_number < current_weight * 4294967295) {
+        if (random_number < current_weight * UINT32_MAX) {
             return k; 
         }
     }
@@ -24,7 +24,7 @@ int weighted_dice_roll(const long double weights[], int num_sides) {
 
 bool weighted_flip(double prob){
     uint32_t random_number = arc4random();
-    if(random_number < prob * 4294967295){
+    if(random_number < prob * UINT32_MAX){
         return true;
     }
     else{
@@ -32,7 +32,7 @@ bool weighted_flip(double prob){
     }
 }
 
-void find_bit_combinations(std::vector<uint8_t>& arr, std::unordered_set<uint8_t>& set) {
+void find_bit_combinations_allpairs(std::vector<uint8_t>& arr, std::unordered_set<uint8_t>& set) {
     for (uint8_t mask = 1; mask != 0; mask <<= 1) {
         for(int i = 0; i < arr.size()-1; i++){
             if((arr[i] & mask) != (arr[i+1] & mask)){ 
@@ -42,8 +42,8 @@ void find_bit_combinations(std::vector<uint8_t>& arr, std::unordered_set<uint8_t
                     rep1[j] = arr[j] & ~mask;
                     rep2[j] = arr[j] | mask;
                 }
-                find_bit_combinations(rep1, set);
-                find_bit_combinations(rep2, set);
+                find_bit_combinations_allpairs(rep1, set);
+                find_bit_combinations_allpairs(rep2, set);
                 return;
             }
         }

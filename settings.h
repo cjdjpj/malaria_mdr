@@ -3,7 +3,7 @@
 //transmission
 #define STARTING_POISSON_MEAN 0.4
 
-#define R_NAUGHT 10
+#define R_NAUGHT 3
 
 #define NUM_GENERATIONS 70
 
@@ -27,13 +27,13 @@
 
 enum drug {AS = 0, LM, AQ, PPQ, MQ, CQ, AL, ASAQ, DHAPPQ, ASMQ, NO_DRUG};
 
-#define DTS_CYCLING
+#define DTS_SINGLE
 
 #define CYCLING_DRUG1 AQ
 #define CYCLING_DRUG2 AS
 #define CYCLING_DRUG3 AL
 
-#define SINGLE_DRUG AQ
+#define SINGLE_DRUG LM
 
 #define MFT_DRUG1 AQ
 #define MFT_DRUG2 AS
