@@ -8,9 +8,10 @@ data = data.iloc[1:]
 
 print(data)
 
-plt.xlabel('Generation')
-plt.ylabel('Mean fitness (unitless)')
-plt.title('Mean fitness of infected hosts over generations')
+plt.style.use('ggplot')
+plt.xlabel('Transmission cycles', fontsize = 12)
+plt.ylabel('Mean fitness (unitless)', fontsize = 12)
+plt.title('Mean fitness of infected hosts across generations', fontsize = 12)
 
 plt.grid(True)
 plt.plot(data.iloc[:])

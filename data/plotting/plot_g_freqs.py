@@ -1,13 +1,16 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import scienceplots
 
 csv_file_path = '../g_freqs.csv'
 data = pd.read_csv(csv_file_path, header=None)
 
+plt.style.use('ggplot')
 data = data.reset_index()
 data.rename(columns={'index': 'Generation'}, inplace=True)
-
+plt.figure(figsize=(6,6))
 plt.ylim(0, 1)
+
 
 print(data)
 
@@ -42,9 +45,9 @@ for column in custom_legend_titles:
 for column in surviving_clones:
     line = plt.plot(data['Generation'], data[column], alpha=0.6, label=column)[0]
 
-plt.xlabel('Generation')
-plt.ylabel('Global Frequency')
-plt.title('Global Frequency of Malaria Clones over generations')
+plt.xlabel('Transmission cycles', fontsize = 12)
+plt.ylabel('Frequency (unitless)', fontsize = 12)
+plt.title('Global clone frequencies across generations', fontsize = 12)
 
 plt.legend(title='Surviving Clones', loc='upper right')
 

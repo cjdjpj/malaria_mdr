@@ -9,11 +9,14 @@ prevalences = 1 - poisson.cdf(0, data[0])
 
 print(prevalences)
 
+plt.style.use('ggplot')
+plt.figure(figsize=(6,6))
+plt.ylim(0, 1)
 plt.plot(data.index, prevalences, label='Prevalence')
 
-plt.xlabel('Generation')
-plt.ylabel('Prevalence')
-plt.title('Prevalence over generations')
+plt.xlabel('Transmission cycles', fontsize = 12)
+plt.ylabel('Prevalence (ratio of infected individuals)', fontsize = 12)
+plt.title('Prevalence across generations', fontsize = 12)
 plt.grid(True)
 plt.legend()
 plt.show()

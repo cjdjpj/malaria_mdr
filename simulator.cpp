@@ -139,7 +139,11 @@ int main(){
 		#ifdef DEBUG_DRUG
 			#ifdef DTS_CYCLING
 			std::string drug_names[] = {"AS", "LM", "AQ", "PPQ", "MQ", "CQ", "AL", "ASAQ", "DHAPPQ", "ASMQ", "NO_DRUG"};
-			std::cout << "CURRENT CYCLING DRUG: " << drug_names[(int)host_population[0].host_drug] << "\n";
+			drug prev_drug;
+			if(prev_drug != host_population[0].host_drug || gen == 1){
+				std::cout << "DRUG: " << drug_names[(int)host_population[0].host_drug] << "\n";
+			}
+			prev_drug = host_population[0].host_drug;
 			#endif
 		#endif
 
