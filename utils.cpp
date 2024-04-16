@@ -1,5 +1,4 @@
 #include <iostream>
-#include <bit>
 
 #include "utils.h"
 
@@ -32,7 +31,7 @@ bool weighted_flip(double prob){
     }
 }
 
-void find_bit_combinations_allpairs(std::vector<uint8_t>& arr, std::unordered_set<uint8_t>& set) {
+void find_bit_combinations_many(std::vector<uint8_t>& arr, std::unordered_set<uint8_t>& set) {
     for (uint8_t mask = 1; mask != 0; mask <<= 1) {
         for(int i = 0; i < arr.size()-1; i++){
             if((arr[i] & mask) != (arr[i+1] & mask)){ 
@@ -42,13 +41,36 @@ void find_bit_combinations_allpairs(std::vector<uint8_t>& arr, std::unordered_se
                     rep1[j] = arr[j] & ~mask;
                     rep2[j] = arr[j] | mask;
                 }
-                find_bit_combinations_allpairs(rep1, set);
-                find_bit_combinations_allpairs(rep2, set);
+                find_bit_combinations_many(rep1, set);
+                find_bit_combinations_many(rep2, set);
                 return;
             }
         }
     }
     set.insert(arr[0]);
+}
+
+void find_bit_combinations_pair(uint8_t a, uint8_t b, std::unordered_set<uint8_t>& set) {
+    if (a == b) {
+        set.insert(a);
+        return;
+    }
+
+    uint8_t xor_ab = a ^ b;
+    uint8_t mask = 1 << std::countr_zero(xor_ab); // Start at the lowest set bit in a ^ b
+    uint8_t highest_bit = 1 << (7 - std::countl_zero(xor_ab)); // Greatest set bit in a ^ b, 7 for 8-bit numbers
+
+    for (; mask <= highest_bit; mask <<= 1) {
+        if ((a & mask) != (b & mask)) {
+            find_bit_combinations_pair(a & ~mask, b & ~mask, set);
+            find_bit_combinations_pair(a | mask, b | mask, set);
+            return;
+        }
+    }
+}
+
+int comb2(int n) {
+    return (n * (n - 1)) / 2;
 }
 
 bool are_same(long double a, long double b){

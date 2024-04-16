@@ -83,7 +83,7 @@ void Host::recombine(){
 	//determine recombinants
 	std::unordered_set<uint8_t> recombinants{};
 	std::vector<uint8_t> vec_i_clones(i_clones.begin(), i_clones.end());
-	find_bit_combinations_allpairs(vec_i_clones, recombinants);
+	find_bit_combinations_many(vec_i_clones, recombinants);
 
 	//determine freq of each allele
     long double allele_freq0[NUM_LOCI]{};
