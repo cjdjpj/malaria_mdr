@@ -3,7 +3,7 @@
 //transmission
 #define STARTING_POISSON_MEAN 0.4
 
-#define R_NAUGHT 6
+#define R_NAUGHT 8
 
 #define NUM_GENERATIONS 60
 
@@ -12,13 +12,15 @@
 #define TERMINATE_WHEN_ENDEMIC_OR_ELIMINATED
 
 //genetics
-#define LAMBDA 0.000001 //mutation rate
-
-#define THETA 1 //recombination rate
-
 #define NUM_LOCI 6
 
 #define NUM_UNIQUE_CLONES 64 //2^NUM_LOCI
+
+#define MUTATION_RATE 0.000001
+
+#define RECOMBINATION_RATE 1
+
+#define CHR5_UNLINKED_PROB 0.00013067
 
 //drug treatment
 #define TREATED_PROP 1

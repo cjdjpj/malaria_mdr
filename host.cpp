@@ -19,7 +19,7 @@ void Host::choose_clones(const long double g_freqs[NUM_UNIQUE_CLONES]){
 	}
 }
 
-void Host::choose_drugs(int generation, int clone_id , const long double avg_fitness_data[NUM_DRUGS], const long double generational_mean_fitness[NUM_GENERATIONS]){
+void Host::choose_drugs(int generation, int clone_id , const long double clone_drug_avg_fitness[NUM_DRUGS], const long double generational_mean_fitness[NUM_GENERATIONS]){
 
 	if(clone_id > NUM_HOSTS * TREATED_PROP){
 		host_drug = NO_DRUG;
@@ -47,7 +47,7 @@ void Host::choose_drugs(int generation, int clone_id , const long double avg_fit
 		host_drug = CYCLING_DRUG1;
 		return;
 	}
-	if(generational_mean_fitness[generation] > avg_fitness_data[(int)host_drug]){
+	if(generational_mean_fitness[generation] > clone_drug_avg_fitness[(int)host_drug]){
 		if(host_drug == CYCLING_DRUG1){
 			host_drug = CYCLING_DRUG2;
 		}
@@ -77,45 +77,37 @@ void Host::naturally_select(const long double clone_drug_fitness[NUM_UNIQUE_CLON
 
 
 void Host::recombine(){
-	if(!weighted_flip(THETA) || !moi){
+	if(!weighted_flip(RECOMBINATION_RATE) || !moi){
 		return;
 	}
-	//determine recombinants
-	std::unordered_set<uint8_t> recombinants{};
-	std::vector<uint8_t> vec_i_clones(i_clones.begin(), i_clones.end());
-	find_bit_combinations_many(vec_i_clones, recombinants);
+    long double new_freqs[NUM_UNIQUE_CLONES]{};
+    for (const auto p1 : i_clones) {
+        for (const auto p2 : i_clones) {
+            if(p1 == p2){
+                new_freqs[p1] += i_freqs[p1] * i_freqs[p1];
+                continue;
+            }
+            std::set<uint8_t> recombinants {};
+            find_bit_combinations_pair(p1, p2, recombinants);
+            for(const auto& c : recombinants){
+                long double recombinant_freq = (i_freqs[p1] * i_freqs[p2])/recombinants.size();
+                if(opposite_chr5_alleles(p1, p2)){
+                    if(diff_chr5_alleles(c, p1) && diff_chr5_alleles(c, p2)){
+                        recombinant_freq = recombinant_freq*2 * CHR5_UNLINKED_PROB;
+                    }
+                    else{
+                        recombinant_freq = recombinant_freq*2 * (1-CHR5_UNLINKED_PROB);
+                    }
+                }
+                if(!are_same(recombinant_freq, 0.0)){
+	                new_freqs[c] += recombinant_freq;
+	                i_clones.insert(c);
+                }
 
-	//determine freq of each allele
-    long double allele_freq0[NUM_LOCI]{};
-    long double allele_freq1[NUM_LOCI]{};
-
-    for(int i=0; i<NUM_LOCI; i++){
-        long double sum = 0.0;
-        uint8_t mask = 1 << i;
-        for(uint8_t c : i_clones){
-            if(c&mask){
-                sum += i_freqs[c];
             }
         }
-        allele_freq1[i] = sum;
-        allele_freq0[i] = 1-sum;
     }
-
-    //determine new recombinant frequencies 
-    for(const auto& recombinant : recombinants){
-    	i_clones.insert(recombinant);
-    	long double product = 1.0;
-    	for(int i=0; i<NUM_LOCI; i++){
-        	uint8_t mask = 1 << i;
-    		if((recombinant&mask)){
-    			product *= allele_freq1[i];
-    		}
-    		else{
-    			product *= allele_freq0[i];
-    		}
-    	}
-    	i_freqs[recombinant] = product;
-    }
+    std::copy(std::begin(new_freqs), std::end(new_freqs), std::begin(i_freqs));
 }
 
 void Host::reset(){
@@ -132,11 +124,16 @@ void Host::reset(){
 
 void Host::validate_i_freq() const {
 	long double sum = 0.0;
+	long double sum2 = 0.0;
 	for(int j=0; j<NUM_UNIQUE_CLONES; j++){
 		sum += i_freqs[j];
 	}
-	if(moi && !are_same(sum, 1.0)){
+	for(const auto& c : i_clones){
+		sum2 += i_freqs[c];
+	}
+	if(moi && !are_same(sum, 1.0) && !are_same(sum2, 1.0)){
 		std::cout << "invalid, f=" << sum << std::endl;
+		print_summary();
 	}
 }
 

@@ -29,19 +29,23 @@ int main(){
 	long double generational_poisson_mean[NUM_GENERATIONS]{};
 	long double generational_g_freqs[NUM_GENERATIONS][NUM_UNIQUE_CLONES]{};
 	long double generational_mean_fitness[NUM_GENERATIONS]{};
-	std::unordered_set<uint8_t> g_clones{};
+	std::set<uint8_t> g_clones{};
 
-	//set initial conditions
+	//SETTING: initial conditions
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
 	g_clones.insert(0);
-	generational_g_freqs[0][0] = 1.0/1;
+	g_clones.insert(2);
+	g_clones.insert(6);
+	generational_g_freqs[0][0] = 1.0/3;
+	generational_g_freqs[0][2] = 1.0/3;
+	generational_g_freqs[0][6] = 1.0/3;
 	int gen = 0;
 	int num_infected = 0;
 
 	//sim start
 	while(gen<NUM_GENERATIONS-1){
 
-		//*****for hosts: transmission, drug distribution, selection, recombination*****//
+		//transmission, drug distribution, selection, recombination//
 		poisson_generator.reset();
 		poisson_generator.param(std::poisson_distribution<>::param_type(generational_poisson_mean[gen]));
 		num_infected = 0;
@@ -65,7 +69,7 @@ int main(){
 			// host_population[h].validate_i_freq();
 		}
 
-		//*****census*****//
+		//census//
 		g_clones.clear();
 		gen++; //store data into next gen.
 
@@ -81,6 +85,7 @@ int main(){
 			    generational_g_freqs[gen][c] += host_population[h].i_freqs[c] * host_population[h].mean_fitness;
 			}
 		}
+		//normalize g_freqs
 		long double total_freq = 0.0;
 		for(const auto& c : g_clones){
 			total_freq += generational_g_freqs[gen][c];
@@ -89,17 +94,17 @@ int main(){
 			generational_g_freqs[gen][c] /= total_freq;
 		}
 
-		//*****mutation*****//
+		//mutation//
 		for(const auto& c : g_clones){
 			int num_mutants = (NUM_LOCI-std::popcount(c));
 			for(int l=0; l<NUM_LOCI; l++){
 				int current_bit = 1 << l;
 				if(!(current_bit&c)){
-					generational_g_freqs[gen][(c+current_bit)] += generational_g_freqs[gen][c] * LAMBDA;
+					generational_g_freqs[gen][(c+current_bit)] += generational_g_freqs[gen][c] * MUTATION_RATE;
 					g_clones.insert((c+current_bit));
 				}
 			}
-			generational_g_freqs[gen][c] -= (generational_g_freqs[gen][c] * LAMBDA * num_mutants);
+			generational_g_freqs[gen][c] -= (generational_g_freqs[gen][c] * MUTATION_RATE * num_mutants);
 		}
 
 		//find new poisson mean
@@ -131,7 +136,9 @@ int main(){
 		std::cout << "\n-------HOST SUMMARIES-------\n\n";
 		std::cout << "MOI\n";
 		for(int h=0; h<NUM_HOSTS; h++){
-			host_population[h].print_summary();
+			if(host_population[h].moi){
+				host_population[h].print_summary();
+			}
 		}
 		#endif
 
@@ -150,7 +157,7 @@ int main(){
 		//PRINT TRANSMISSION
 		#ifdef DEBUG_TRANSMISSION
 		std::cout << "\npoisson_mean: " << generational_poisson_mean[gen] << "\n";
-		std::cout << "num_infected: " << num_infected << "\n";
+		std::cout << "prop_infected: " << (double)num_infected/NUM_HOSTS << "\n";
 		#endif
 
 	}

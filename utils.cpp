@@ -31,7 +31,7 @@ bool weighted_flip(double prob){
     }
 }
 
-void find_bit_combinations_many(std::vector<uint8_t>& arr, std::unordered_set<uint8_t>& set) {
+void find_bit_combinations_many(std::vector<uint8_t>& arr, std::set<uint8_t>& set) {
     for (uint8_t mask = 1; mask != 0; mask <<= 1) {
         for(int i = 0; i < arr.size()-1; i++){
             if((arr[i] & mask) != (arr[i+1] & mask)){ 
@@ -50,7 +50,7 @@ void find_bit_combinations_many(std::vector<uint8_t>& arr, std::unordered_set<ui
     set.insert(arr[0]);
 }
 
-void find_bit_combinations_pair(uint8_t a, uint8_t b, std::unordered_set<uint8_t>& set) {
+void find_bit_combinations_pair(uint8_t a, uint8_t b, std::set<uint8_t>& set) {
     if (a == b) {
         set.insert(a);
         return;
@@ -69,8 +69,12 @@ void find_bit_combinations_pair(uint8_t a, uint8_t b, std::unordered_set<uint8_t
     }
 }
 
-int comb2(int n) {
-    return (n * (n - 1)) / 2;
+bool opposite_chr5_alleles(uint8_t x, uint8_t y){
+    return (((x >> 3) & 1) != ((y >> 3) & 1) && ((x >> 4) & 1) != ((y >> 4) & 1));
+}
+
+bool diff_chr5_alleles(uint8_t x, uint8_t y){
+    return ((x >> 3) & 1) != ((y >> 3) & 1) || ((x >> 4) & 1) != ((y >> 4) & 1);
 }
 
 bool are_same(long double a, long double b){
