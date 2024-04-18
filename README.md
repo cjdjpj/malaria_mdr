@@ -1,7 +1,7 @@
 Individual-based Malaria model using transmission cycles as time step. 
 
 ### Model Architecture
-This model assumes a pool of Malaria clones and a population of anonymous hosts. It is stochastic and is run over discrete time steps equivalent to one Malaria generation/transmission cycle, which is approximately 100 days (as assumed in Ian M. Hastings 2002).
+This model assumes a pool of Malaria clones and a population of anonymous hosts. It is stochastic and is run over discrete time steps equivalent to one Malaria generation/transmission cycle, which is approximately 28 days in high transmission regions.
 
 Here I will describe each step in the order that it occurs in the model.
 
@@ -26,15 +26,15 @@ $$f_c' = \frac{f_c \times w_{c,d}}{m}$$
 
 Fitness values are drawn from Appendix 2 of Nguyen et al. 2023
 The untreated fitness values for clones are calculated as:
-$$w_{c,\text{untreated}} = (1-0.0005)^{n\times d}$$
-where $n$ is the number of resistance conferring mutations and $d$ is the assumed number of days in a transmission cycle (e.g. 100).
+$$w_{c,\text{untreated}} = (0.9995)^{n\times d}$$
+where $n$ is the number of resistance conferring mutations and $d$ is the assumed number of days in a transmission cycle (e.g. 28).
 
 #### (3) Recombination
 We assume mosquitoes (not simulated) pick up Malaria clones in exactly the frequency that they were in after selection within the host. We don't consider interrupted feeding.
 
 A parameter $\theta$ controls the proportion of the population that undergoes recombination.
 
-Every possible clone pair produces sexual offspring with frequency equal to the probability of their parental pairing divided by the total number of recombinants given no linkage.
+Every possible clone pair produces sexual offspring with frequency equal to the probability of their parental pairing divided by the total number of recombinants given no linkage. Therefore, during sexual recombination, complete recombination occurs - i.e. parental clones are completely split up into possible recombinants.
 
 ##### Linkage
 Currently, the only loci exhibiting linkage in the model are Y184F and N86Y - both at *pfmdr1* on chromosome 5. *pfmdr1* has 1 exon, meaning the sites are 294bp apart.
