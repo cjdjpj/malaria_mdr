@@ -78,5 +78,5 @@ bool diff_chr5_alleles(uint8_t x, uint8_t y){
 }
 
 bool are_same(long double a, long double b){
-    return fabs(a - b) < 0.00000000000001;
+    return fabs(a - b) < 1e-10;
 }

@@ -4,12 +4,13 @@
 #include "host.h"
 #include "simulator.h"
 
+#include <vector>
 #include <iostream>
 
 int main(){
 
 	//initialize hosts
-	Host* host_population = new Host[NUM_HOSTS]{};
+	std::vector<Host> host_population(NUM_HOSTS);
 
 	//read in drug-clone fitness values
 	long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]{};
@@ -165,7 +166,4 @@ int main(){
 	write_2d_array_to_csv("../data/g_freqs.csv", gen, generational_g_freqs);
 	write_array_to_csv("../data/mean_fitness.csv", gen, generational_mean_fitness);
 	write_array_to_csv("../data/poisson_mean.csv", gen, generational_poisson_mean);
-
-	//cleanup
-	delete[] host_population;
 }
