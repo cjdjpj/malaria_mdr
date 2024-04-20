@@ -4,7 +4,8 @@
 
 #include <iostream>
 
-Host::Host() : id(0), moi(0), mean_fitness(0), host_drug(NO_DRUG), i_clones(), i_freqs{}{}
+int Host::next_id = 1;
+Host::Host() :id(next_id++), moi(0), mean_fitness(0), host_drug(NO_DRUG), i_clones(), i_freqs{}{}
 
 void Host::choose_clones(const double g_freqs[NUM_UNIQUE_CLONES]){
 	for(int i=0; i<moi; i++){
@@ -31,10 +32,10 @@ void Host::choose_drugs(int generation, const double clone_drug_avg_fitness[NUM_
 	#endif
 
 	#ifdef DTS_MFT
-	if(id < NUM_HOSTS/3){
+	if(id <= NUM_HOSTS/3){
 		host_drug = MFT_DRUG1;
 	}
-	else if(id >= NUM_HOSTS/3 && id < 2*NUM_HOSTS/3){
+	else if(id > NUM_HOSTS/3 && id <= 2*NUM_HOSTS/3){
 		host_drug = MFT_DRUG2;
 	}
 	else{
@@ -138,12 +139,13 @@ void Host::validate_i_freq() const {
 }
 
 void Host::print_summary() const {
-	std::cout << (unsigned)moi << "\n";
-	std::cout << "mean_fitness: " << mean_fitness << "\n";
+	std::cout << "[" << id << "]" << "\n";
+	std::cout << "moi: " << moi << ", mean_fitness: " << mean_fitness << ", drug: " << host_drug << "\n";
 	for(const uint8_t& c: i_clones) {
-		if(are_same(i_freqs[c], 0)){
+		if(are_same(i_freqs[c], 0.0)){
 			continue;
 		}
-	    std::cout << "\t" <<"c_" << (unsigned)c << " freq = " << i_freqs[c] << "\n";
+	    std::cout << "\t" <<"c_" << (int)c << " = " << i_freqs[c] << "\n";
 	}
+	std::cout << "\n";
 }

@@ -5,7 +5,7 @@
 
 #define R_NAUGHT 5
 
-#define NUM_GENERATIONS 150
+#define NUM_GENERATIONS 60
 
 #define NUM_HOSTS 300000
 
@@ -29,11 +29,11 @@
 
 enum drug {AS = 0, LM, AQ, PPQ, MQ, CQ, AL, ASAQ, DHAPPQ, ASMQ, NO_DRUG};
 
-#define DTS_SINGLE
+#define DTS_CYCLING
 
-#define CYCLING_DRUG1 AQ
-#define CYCLING_DRUG2 AL
-#define CYCLING_DRUG3 ASAQ
+#define CYCLING_DRUG1 AS
+#define CYCLING_DRUG2 LM
+#define CYCLING_DRUG3 AQ
 
 #define SINGLE_DRUG LM
 

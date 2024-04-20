@@ -129,7 +129,7 @@ int main(){
 			if(are_same(generational_g_freqs[gen][c],0)){
 				continue;
 			}
-			std::cout << "clone_" << (int)c << ": " << generational_g_freqs[gen][c] << "\n";
+			std::cout << "c_" << (int)c << " = " << generational_g_freqs[gen][c] << "\n";
 		}
 		std::cout << g_clones.size() << " total clones\n\n";
 		#endif
@@ -137,11 +137,8 @@ int main(){
 		//PRINT HOSTS
 		#ifdef DEBUG_HOST
 		std::cout << "\n-------HOST SUMMARIES-------\n\n";
-		std::cout << "MOI\n";
 		for(const Host& host : host_population){
-			if(host.moi){
-				host.print_summary();
-			}
+			host.print_summary();
 		}
 		#endif
 
@@ -159,8 +156,8 @@ int main(){
 
 		//PRINT TRANSMISSION
 		#ifdef DEBUG_TRANSMISSION
-		std::cout << "\npoisson_mean: " << generational_poisson_mean[gen] << "\n";
-		std::cout << "prop_infected: " << (double)num_infected/NUM_HOSTS << "\n";
+		std::cout << "\npois_mean: " << generational_poisson_mean[gen] << "\n";
+		std::cout << "% inf: " << std::setprecision(3) << (double)num_infected/NUM_HOSTS * 100 << "%" << "\n";
 		#endif
 
 	}
