@@ -2,13 +2,13 @@
 
 #include "utils.h"
 
-int weighted_dice_roll(const long double weights[], int num_sides) {
+int weighted_dice_roll(const double weights[], int num_sides) {
     if (num_sides <= 0) {
            throw std::invalid_argument("Number of sides must > 0");
     }
     // Use arc4random_uniform to generate a random number
     uint32_t random_number = arc4random();
-    long double current_weight = 0;
+    double current_weight = 0;
     
     for (int k=0; k<num_sides; ++k) {
         current_weight += weights[k];
@@ -77,6 +77,6 @@ bool diff_chr5_alleles(uint8_t x, uint8_t y){
     return ((x >> 3) & 1) != ((y >> 3) & 1) || ((x >> 4) & 1) != ((y >> 4) & 1);
 }
 
-bool are_same(long double a, long double b){
+bool are_same(double a, double b){
     return fabs(a - b) < 1e-10;
 }

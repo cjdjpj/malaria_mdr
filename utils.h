@@ -2,7 +2,7 @@
 #include <set>
 #include <vector>
 
-int weighted_dice_roll(const long double weights[], int num_sides);
+int weighted_dice_roll(const double weights[], int num_sides);
 
 bool weighted_flip(double prob);
 
@@ -14,4 +14,4 @@ bool opposite_chr5_alleles(uint8_t x, uint8_t y);
 
 bool diff_chr5_alleles(uint8_t x, uint8_t y);
 
-bool are_same(long double a, long double b);
+bool are_same(double a, double b);

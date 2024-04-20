@@ -4,18 +4,19 @@
 class Host{
 public:
 	Host();
-	uint8_t moi;
+	int id;
+	int moi;
 	drug host_drug;
-	long double mean_fitness;
+	double mean_fitness;
 
 	// storing clones and clone freqs for INDIVIDUALS
 	std::set<uint8_t> i_clones;
-	long double i_freqs[NUM_UNIQUE_CLONES];
+	double i_freqs[NUM_UNIQUE_CLONES];
 
-	void choose_clones(const long double g_freqs[NUM_UNIQUE_CLONES]);
-	void choose_drugs(int generation, int clone_id, const long double avg_fitness_data[NUM_DRUGS], const long double generational_mean_fitness[NUM_GENERATIONS]);
+	void choose_clones(const double g_freqs[NUM_UNIQUE_CLONES]);
+	void choose_drugs(int generation, const double avg_fitness_data[NUM_DRUGS], const double generational_mean_fitness[NUM_GENERATIONS]);
 	void recombine();
-	void naturally_select(const long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]);
+	void naturally_select(const double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]);
 	void reset();
 
 	//debug

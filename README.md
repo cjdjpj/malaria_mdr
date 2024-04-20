@@ -39,7 +39,7 @@ Every possible clone pair produces sexual offspring with frequency equal to the 
 ##### Linkage
 Currently, the only loci exhibiting linkage in the model are Y184F and N86Y - both at *pfmdr1* on chromosome 5. *pfmdr1* has 1 exon, meaning the sites are 294bp apart.
 
-Using the genetic map estimate of $1.5-3.0 \times 10^4$ bp for 1 cM in Conway 1998, this means a $0.013\%$ chance of independent inheritance $(r = 0.00013067)$. Therefore, recombinant clones with a different combination of alleles to both parents at both these loci have their frequency multiplied by $2r$. Recombinant clones with the same combination of alleles as either parent at both these loci have their frequency multiplied by $2(1-r)$
+Using the genetic map estimate of $1.5-3.0 \times 10^4$ bp for 1 cM in Conway 1998, this means a 0.013% chance of independent inheritance $(r = 0.00013067)$. Therefore, recombinant clones with a different combination of alleles to both parents at both these loci have their frequency multiplied by $2r$. Recombinant clones with the same combination of alleles as either parent at both these loci have their frequency multiplied by $2(1-r)$
 
 #### (4) Census
 The new global frequency of each clone $F_c$ is collected with each host's contribution weighted according to their mean fitness. That is, for host $j$ and mean fitness $m_j$:

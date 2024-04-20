@@ -13,13 +13,13 @@ int main(){
 	std::vector<Host> host_population(NUM_HOSTS);
 
 	//read in drug-clone fitness values
-	long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]{};
+	double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]{};
 	read_csv_to_2d_array_drug("../data/fitness_values_full.csv", clone_drug_fitness);
 
 	//find avg fitness
-	long double clone_drug_avg_fitness[NUM_UNIQUE_CLONES]{};
+	double clone_drug_avg_fitness[NUM_DRUGS]{};
 	for(int i=0; i<NUM_DRUGS; i++){
-		long double sum = 0.0;
+		double sum = 0.0;
 		for(int j=0; j<NUM_UNIQUE_CLONES; j++){
 			sum += clone_drug_fitness[j][i];
 		}
@@ -27,9 +27,9 @@ int main(){
 	}
 
 	//global clone data collection
-	long double generational_poisson_mean[NUM_GENERATIONS]{};
-	long double generational_g_freqs[NUM_GENERATIONS][NUM_UNIQUE_CLONES]{};
-	long double generational_mean_fitness[NUM_GENERATIONS]{};
+	double generational_poisson_mean[NUM_GENERATIONS]{};
+	double generational_g_freqs[NUM_GENERATIONS][NUM_UNIQUE_CLONES]{};
+	double generational_mean_fitness[NUM_GENERATIONS]{};
 	std::set<uint8_t> g_clones{};
 
 	//SETTING: initial conditions
@@ -50,62 +50,64 @@ int main(){
 		poisson_generator.reset();
 		poisson_generator.param(std::poisson_distribution<>::param_type(generational_poisson_mean[gen]));
 		num_infected = 0;
-		for(int h=0; h<NUM_HOSTS; h++){
-			host_population[h].reset();
+		for(Host& host : host_population){
+			host.reset();
 
-			host_population[h].moi = poisson_generator(rng);
+			host.moi = poisson_generator(rng);
 
-			if(host_population[h].moi){
+			if(host.moi){
 				num_infected++;
 			}
 
-			host_population[h].choose_clones(generational_g_freqs[gen]);
+			host.choose_clones(generational_g_freqs[gen]);
 
-			host_population[h].choose_drugs(gen, h, clone_drug_avg_fitness, generational_mean_fitness);
+			host.choose_drugs(gen, clone_drug_avg_fitness, generational_mean_fitness);
 
-			host_population[h].naturally_select(clone_drug_fitness);
+			host.naturally_select(clone_drug_fitness);
 
-			host_population[h].recombine();
+			host.recombine();
 
-			// host_population[h].validate_i_freq();
+			// host.validate_i_freq();
 		}
 
 		//census//
 		g_clones.clear();
 		gen++; //store data into next gen.
 
-		//find average (weighted by mean fitness) clone freqs
-		for(int h=0; h<NUM_HOSTS; h++){
-			generational_mean_fitness[gen] += host_population[h].mean_fitness;
-		}
-		generational_mean_fitness[gen] /= NUM_HOSTS;
-
-		for(int h=0; h<NUM_HOSTS; h++){
-			for (const auto& c: host_population[h].i_clones) {
-				g_clones.insert(c);
-			    generational_g_freqs[gen][c] += host_population[h].i_freqs[c] * host_population[h].mean_fitness;
+		double total_fitness = 0.0;
+		for(const Host& host : host_population){
+			if(!host.moi){
+				continue;
 			}
+			for (const uint8_t& c: host.i_clones) {
+				g_clones.insert(c);
+			    generational_g_freqs[gen][c] += host.i_freqs[c] * host.mean_fitness;
+			}
+			total_fitness += host.mean_fitness;
 		}
 		//normalize g_freqs
-		long double total_freq = 0.0;
-		for(const auto& c : g_clones){
-			total_freq += generational_g_freqs[gen][c];
-		}
-		for(const auto& c : g_clones){
-			generational_g_freqs[gen][c] /= total_freq;
+		for(const uint8_t& c : g_clones){
+			generational_g_freqs[gen][c] /= total_fitness;
 		}
 
+		//record mean fitness
+		generational_mean_fitness[gen] = total_fitness/NUM_HOSTS;
+
 		//mutation//
-		for(const auto& c : g_clones){
+		std::set<uint8_t> to_be_mutants{};
+		for(const uint8_t& c : g_clones){
 			int num_mutants = (NUM_LOCI-std::popcount(c));
 			for(int l=0; l<NUM_LOCI; l++){
 				int current_bit = 1 << l;
 				if(!(current_bit&c)){
-					generational_g_freqs[gen][(c+current_bit)] += generational_g_freqs[gen][c] * MUTATION_RATE;
-					g_clones.insert((c+current_bit));
+					generational_g_freqs[gen][c+current_bit] += generational_g_freqs[gen][c] * MUTATION_RATE;
+					to_be_mutants.insert(c+current_bit);
 				}
 			}
 			generational_g_freqs[gen][c] -= (generational_g_freqs[gen][c] * MUTATION_RATE * num_mutants);
+		}
+		for(const uint8_t& c : to_be_mutants){
+			g_clones.insert(c);
 		}
 
 		//find new poisson mean
@@ -123,7 +125,7 @@ int main(){
 		//PRINT GLOBAL ALLELE FREQUENCIES
 		#ifdef DEBUG_G_CLONE
 		std::cout << "-------GLOBAL CLONE FREQUENCIES-------\n";
-		for(const auto& c: g_clones){
+		for(const uint8_t& c: g_clones){
 			if(are_same(generational_g_freqs[gen][c],0)){
 				continue;
 			}
@@ -136,9 +138,9 @@ int main(){
 		#ifdef DEBUG_HOST
 		std::cout << "\n-------HOST SUMMARIES-------\n\n";
 		std::cout << "MOI\n";
-		for(int h=0; h<NUM_HOSTS; h++){
-			if(host_population[h].moi){
-				host_population[h].print_summary();
+		for(const Host& host : host_population){
+			if(host.moi){
+				host.print_summary();
 			}
 		}
 		#endif

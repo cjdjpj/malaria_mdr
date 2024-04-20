@@ -4,9 +4,9 @@
 
 #include <iostream>
 
-Host::Host() : moi(NAN), mean_fitness(NAN), host_drug(NO_DRUG), i_clones(), i_freqs{}{}
+Host::Host() : id(0), moi(0), mean_fitness(0), host_drug(NO_DRUG), i_clones(), i_freqs{}{}
 
-void Host::choose_clones(const long double g_freqs[NUM_UNIQUE_CLONES]){
+void Host::choose_clones(const double g_freqs[NUM_UNIQUE_CLONES]){
 	for(int i=0; i<moi; i++){
 		//select clones
 		int clone_injected = weighted_dice_roll(g_freqs, NUM_UNIQUE_CLONES);
@@ -15,13 +15,13 @@ void Host::choose_clones(const long double g_freqs[NUM_UNIQUE_CLONES]){
 		i_clones.insert(clone_injected);
 
 		//add associated frequencies
-		i_freqs[clone_injected] += (long double)1/moi;
+		i_freqs[clone_injected] += 1.0/moi;
 	}
 }
 
-void Host::choose_drugs(int generation, int clone_id , const long double clone_drug_avg_fitness[NUM_DRUGS], const long double generational_mean_fitness[NUM_GENERATIONS]){
+void Host::choose_drugs(int generation, const double clone_drug_avg_fitness[NUM_DRUGS], const double generational_mean_fitness[NUM_GENERATIONS]){
 
-	if(clone_id > NUM_HOSTS * TREATED_PROP){
+	if(id > NUM_HOSTS * TREATED_PROP){
 		host_drug = NO_DRUG;
 		return;
 	}
@@ -31,10 +31,10 @@ void Host::choose_drugs(int generation, int clone_id , const long double clone_d
 	#endif
 
 	#ifdef DTS_MFT
-	if(clone_id < NUM_HOSTS/3){
+	if(id < NUM_HOSTS/3){
 		host_drug = MFT_DRUG1;
 	}
-	else if(clone_id >= NUM_HOSTS/3 && clone_id < 2*NUM_HOSTS/3){
+	else if(id >= NUM_HOSTS/3 && id < 2*NUM_HOSTS/3){
 		host_drug = MFT_DRUG2;
 	}
 	else{
@@ -62,15 +62,15 @@ void Host::choose_drugs(int generation, int clone_id , const long double clone_d
 }
 
 
-void Host::naturally_select(const long double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]){
+void Host::naturally_select(const double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]){
 	mean_fitness = 0.0;
 	if(!moi){
 		return;
 	}
-	for(const auto& c: i_clones){
+	for(const uint8_t& c: i_clones){
 		mean_fitness += clone_drug_fitness[c][host_drug] * i_freqs[c];
 	}
-	for(const auto& c: i_clones){
+	for(const uint8_t& c: i_clones){
 		i_freqs[c] = (clone_drug_fitness[c][host_drug] * i_freqs[c])/mean_fitness;
 	}
 }
@@ -80,17 +80,17 @@ void Host::recombine(){
 	if(!weighted_flip(RECOMBINATION_RATE) || !moi){
 		return;
 	}
-    long double new_freqs[NUM_UNIQUE_CLONES]{};
-    for (const auto p1 : i_clones) {
-        for (const auto p2 : i_clones) {
+    double new_freqs[NUM_UNIQUE_CLONES]{};
+    for (const uint8_t& p1 : i_clones) {
+        for (const uint8_t& p2 : i_clones) {
             if(p1 == p2){
                 new_freqs[p1] += i_freqs[p1] * i_freqs[p1];
                 continue;
             }
             std::set<uint8_t> recombinants {};
             find_bit_combinations_pair(p1, p2, recombinants);
-            for(const auto& c : recombinants){
-                long double recombinant_freq = (i_freqs[p1] * i_freqs[p2])/recombinants.size();
+            for(const uint8_t& c : recombinants){
+                double recombinant_freq = (i_freqs[p1] * i_freqs[p2])/recombinants.size();
                 if(opposite_chr5_alleles(p1, p2)){
                     if(diff_chr5_alleles(c, p1) && diff_chr5_alleles(c, p2)){
                         recombinant_freq = recombinant_freq*2 * CHR5_UNLINKED_PROB;
@@ -111,8 +111,8 @@ void Host::recombine(){
 }
 
 void Host::reset(){
-	moi = NAN;
-	mean_fitness = NAN;
+	moi = 0;
+	mean_fitness = 0.0;
 
 	#ifndef DTS_CYCLING
 		host_drug = NO_DRUG;
@@ -123,12 +123,12 @@ void Host::reset(){
 }
 
 void Host::validate_i_freq() const {
-	long double sum = 0.0;
-	long double sum2 = 0.0;
+	double sum = 0.0;
+	double sum2 = 0.0;
 	for(int j=0; j<NUM_UNIQUE_CLONES; j++){
 		sum += i_freqs[j];
 	}
-	for(const auto& c : i_clones){
+	for(const uint8_t& c : i_clones){
 		sum2 += i_freqs[c];
 	}
 	if(moi && !are_same(sum, 1.0) && !are_same(sum2, 1.0)){
@@ -140,7 +140,7 @@ void Host::validate_i_freq() const {
 void Host::print_summary() const {
 	std::cout << (unsigned)moi << "\n";
 	std::cout << "mean_fitness: " << mean_fitness << "\n";
-	for(const auto& c: i_clones) {
+	for(const uint8_t& c: i_clones) {
 		if(are_same(i_freqs[c], 0)){
 			continue;
 		}

@@ -3,7 +3,7 @@
 #include <sstream>
 #include "settings.h"
 
-void read_csv_to_2d_array_drug(std::string file_path, long double data[NUM_UNIQUE_CLONES][NUM_DRUGS]) {
+void read_csv_to_2d_array_drug(std::string file_path, double data[NUM_UNIQUE_CLONES][NUM_DRUGS]) {
     std::ifstream file(file_path);
 
     std::string line;
@@ -20,7 +20,7 @@ void read_csv_to_2d_array_drug(std::string file_path, long double data[NUM_UNIQU
     file.close();
 }
 
-void write_2d_array_to_csv(std::string file_path, int generation, const long double data[][NUM_UNIQUE_CLONES]) {
+void write_2d_array_to_csv(std::string file_path, int generation, const double data[][NUM_UNIQUE_CLONES]) {
     std::ofstream file(file_path);
 
     for (int row=0; row<generation; row++) {
@@ -35,7 +35,7 @@ void write_2d_array_to_csv(std::string file_path, int generation, const long dou
     file.close();
 }
 
-void write_array_to_csv(std::string file_path, int generation, const long double data[]) {
+void write_array_to_csv(std::string file_path, int generation, const double data[]) {
     std::ofstream file(file_path);
 
     for (int row = 0; row < generation; row++) {
