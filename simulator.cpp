@@ -7,9 +7,9 @@
 #include <vector>
 #include <iostream>
 
-int main(){
-
+void sim_main(double data_over_runs[], int sim_run){
 	//initialize hosts
+	Host::next_id = 0;
 	std::vector<Host> host_population(NUM_HOSTS);
 
 	//read in drug-clone fitness values
@@ -35,11 +35,7 @@ int main(){
 	//SETTING: initial conditions
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
 	g_clones.insert(0);
-	g_clones.insert(2);
-	g_clones.insert(6);
-	generational_g_freqs[0][0] = 1.0/3;
-	generational_g_freqs[0][2] = 1.0/3;
-	generational_g_freqs[0][6] = 1.0/3;
+	generational_g_freqs[0][0] = 1.0/1;
 	int gen = 0;
 	int num_infected = 0;
 
@@ -165,4 +161,15 @@ int main(){
 	write_2d_array_to_csv("../data/g_freqs.csv", gen, generational_g_freqs);
 	write_array_to_csv("../data/mean_fitness.csv", gen, generational_mean_fitness);
 	write_array_to_csv("../data/poisson_mean.csv", gen, generational_poisson_mean);
+}
+
+int main(){
+	double data_over_runs[NUM_RUNS]{};
+	int sim_run = 0;
+	while(sim_run < NUM_RUNS){
+		std::cout << "--------RUN " << sim_run+1 << "--------" << "\n";
+		sim_main(data_over_runs, sim_run);
+		sim_run++;
+	}
+	write_array_to_csv("../data/data_over_runs.csv", sim_run, data_over_runs);
 }

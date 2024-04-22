@@ -3,10 +3,10 @@
 
 class Host{
 private:
-	static int next_id;
 	const int id;
 public:
 	Host();
+	static int next_id;
 	int moi;
 	drug host_drug;
 	double mean_fitness;

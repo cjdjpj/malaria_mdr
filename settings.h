@@ -1,5 +1,7 @@
 #pragma once
 
+#define NUM_RUNS 1
+
 //transmission
 #define STARTING_POISSON_MEAN 0.4
 
@@ -29,7 +31,7 @@
 
 enum drug {AS = 0, LM, AQ, PPQ, MQ, CQ, AL, ASAQ, DHAPPQ, ASMQ, NO_DRUG};
 
-#define DTS_CYCLING
+#define DTS_SINGLE
 
 #define CYCLING_DRUG1 AS
 #define CYCLING_DRUG2 LM

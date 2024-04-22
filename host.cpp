@@ -5,7 +5,7 @@
 #include <iostream>
 
 int Host::next_id = 1;
-Host::Host() :id(next_id++), moi(0), mean_fitness(0), host_drug(NO_DRUG), i_clones(), i_freqs{}{}
+Host::Host() :id{next_id++}, moi{0}, mean_fitness{0}, host_drug{NO_DRUG}, i_clones{}, i_freqs{}{}
 
 void Host::choose_clones(const double g_freqs[NUM_UNIQUE_CLONES]){
 	for(int i=0; i<moi; i++){
@@ -126,8 +126,8 @@ void Host::reset(){
 void Host::validate_i_freq() const {
 	double sum = 0.0;
 	double sum2 = 0.0;
-	for(int j=0; j<NUM_UNIQUE_CLONES; j++){
-		sum += i_freqs[j];
+	for(const double& f: i_freqs){
+		sum += f;
 	}
 	for(const uint8_t& c : i_clones){
 		sum2 += i_freqs[c];
