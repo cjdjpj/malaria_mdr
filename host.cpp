@@ -55,9 +55,9 @@ void Host::choose_drugs(int generation, const double clone_drug_avg_fitness[NUM_
 		else if(host_drug == CYCLING_DRUG2){
 			host_drug = CYCLING_DRUG3;
 		}
-		else{
-			host_drug = CYCLING_DRUG1;
-		}
+		// else{
+		// 	host_drug = CYCLING_DRUG1;
+		// }
 	}
 	#endif
 }

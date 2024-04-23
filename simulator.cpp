@@ -7,7 +7,7 @@
 #include <vector>
 #include <iostream>
 
-void sim_main(double data_over_runs[], int sim_run){
+void sim_main(int data_over_runs[], int sim_run){
 	//initialize hosts
 	Host::next_id = 0;
 	std::vector<Host> host_population(NUM_HOSTS);
@@ -164,7 +164,10 @@ void sim_main(double data_over_runs[], int sim_run){
 }
 
 int main(){
-	double data_over_runs[NUM_RUNS]{};
+	int data_over_runs[NUM_RUNS]{};
+	for(int& d : data_over_runs){
+		d = -1;
+	}
 	int sim_run = 0;
 	while(sim_run < NUM_RUNS){
 		std::cout << "--------RUN " << sim_run+1 << "--------" << "\n";

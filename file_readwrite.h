@@ -35,7 +35,8 @@ void write_2d_array_to_csv(std::string file_path, int generation, const double d
     file.close();
 }
 
-void write_array_to_csv(std::string file_path, int generation, const double data[]) {
+template <class T>
+void write_array_to_csv(std::string file_path, int generation, const T data[]) {
     std::ofstream file(file_path);
 
     for (int row = 0; row < generation; row++) {

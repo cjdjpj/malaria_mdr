@@ -33,15 +33,15 @@ enum drug {AS = 0, LM, AQ, PPQ, MQ, CQ, AL, ASAQ, DHAPPQ, ASMQ, NO_DRUG};
 
 #define DTS_SINGLE
 
-#define CYCLING_DRUG1 AS
+#define CYCLING_DRUG1 CQ
 #define CYCLING_DRUG2 LM
-#define CYCLING_DRUG3 AQ
+#define CYCLING_DRUG3 ASAQ
 
 #define SINGLE_DRUG LM
 
-#define MFT_DRUG1 AQ
-#define MFT_DRUG2 AS
-#define MFT_DRUG3 AL
+#define MFT_DRUG1 CQ
+#define MFT_DRUG2 LM
+#define MFT_DRUG3 ASAQ
 
 #define DEBUG_DRUG
 // #define DEBUG_G_CLONE

@@ -1,19 +1,25 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-data = pd.read_csv('../data.csv')
+# load data
+data = pd.read_csv('../sensitivity_analysis.csv')
 
+# get mean and error
 means = data.mean()
 errors = data.sem()
 
+# settings
+plt.rcParams['savefig.dpi'] = 300
 plt.style.use('ggplot')
 plt.figure(figsize=(10, 6))
-plt.ylim(50, 100)
-plt.errorbar(means.index, means, yerr=errors, fmt='-o', capsize=5)
-plt.title('Sensitivity Analysis')
-plt.xlabel('Variable Parameter')
-plt.ylabel('Measured Metric')
+plt.title('Single drug + WT start: R0 vs Time to max fitness clone fixation')
+plt.xlabel('R0')
+plt.ylabel('Time to max fitness clone fixation (# of generations)')
+plt.xticks(rotation=45)
 plt.grid(True)
-plt.xticks(rotation=45)  # Rotate x-axis labels if necessary
 plt.tight_layout()
+
+# error bars
+plt.errorbar(means.index, means, yerr=errors, fmt='-o', capsize=5)
+
 plt.show()

@@ -2,12 +2,10 @@ import csv
 
 file_path = '../g_freqs.csv'
 
-# Load CSV file
 with open(file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     data = list(reader)
 
-# Get the last row of data
 last_row = data[-1]
 
 print("Surviving clones (at last gen):")

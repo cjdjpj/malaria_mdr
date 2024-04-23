@@ -12,7 +12,7 @@ int weighted_dice_roll(const double weights[], int num_sides) {
     
     for (int k=0; k<num_sides; ++k) {
         current_weight += weights[k];
-        if (random_number < current_weight * UINT32_MAX) {
+        if (random_number <= current_weight * UINT32_MAX) {
             return k; 
         }
     }
