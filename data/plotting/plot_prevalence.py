@@ -21,12 +21,15 @@ plt.rcParams['savefig.dpi'] = 300
 plt.plot(data.index, prevalences, label='Prevalence')
 
 # CYCLING
-# plt.axvline(x=0, color='grey', linestyle='--')
-# plt.text(0+0.5, 0.95, 'CQ', rotation=0, color='grey')
-# plt.axvline(x=15, color='grey', linestyle='--')
-# plt.text(15+0.5, 0.95, 'LM', rotation=0, color='grey')
-# plt.axvline(x=39, color='grey', linestyle='--')
-# plt.text(39+0.5, 0.95, 'ASAQ', rotation=0, color='grey')
+# drug1_gen = 0
+# drug2_gen = 25
+# drug3_gen = 48
+# plt.axvline(x=drug1_gen, color='grey', linestyle='--')
+# plt.text(drug1_gen+0.5, 0.95, 'CQ', rotation=0, color='grey')
+# plt.axvline(x=drug2_gen, color='grey', linestyle='--')
+# plt.text(drug2_gen+0.5, 0.95, 'LM', rotation=0, color='grey')
+# plt.axvline(x=drug3_gen, color='grey', linestyle='--')
+# plt.text(drug3_gen+0.5, 0.95, 'ASAQ', rotation=0, color='grey')
 
 # Setting labels and title
 plt.xlabel('Transmission cycles', fontsize=12)
