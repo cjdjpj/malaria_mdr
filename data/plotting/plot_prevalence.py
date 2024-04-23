@@ -13,7 +13,7 @@ print(prevalences)
 
 # settings
 plt.style.use('ggplot')
-plt.figure(figsize=(6, 6))
+plt.figure(figsize=(10, 10))
 plt.ylim(0, 1)
 plt.rcParams['savefig.dpi'] = 300
 

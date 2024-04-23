@@ -20,7 +20,8 @@ void read_csv_to_2d_array_drug(std::string file_path, double data[NUM_UNIQUE_CLO
     file.close();
 }
 
-void write_2d_array_to_csv(std::string file_path, int generation, const double data[][NUM_UNIQUE_CLONES]) {
+template <class T>
+void write_2d_array_to_csv(std::string file_path, int generation, const T data[][NUM_UNIQUE_CLONES]) {
     std::ofstream file(file_path);
 
     for (int row=0; row<generation; row++) {

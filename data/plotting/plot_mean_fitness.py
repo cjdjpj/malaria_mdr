@@ -10,6 +10,7 @@ print(data)
 
 # settings
 plt.style.use('ggplot')
+plt.figure(figsize=(10, 10))
 plt.rcParams['savefig.dpi'] = 300
 
 # plot data

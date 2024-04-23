@@ -23,7 +23,7 @@ print(data[['DHA-PPQ, AQ triple-resistant', 'DHA-PPQ, LUM triple-resistant',
 # settings
 plt.style.use('ggplot')
 plt.rcParams['savefig.dpi'] = 300
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(10, 10))
 
 # CYCLING
 # drug1_gen = 0
