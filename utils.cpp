@@ -1,4 +1,5 @@
 #include <iostream>
+#include <numeric>
 
 #include "utils.h"
 
@@ -9,7 +10,7 @@ int weighted_dice_roll(const double weights[], int num_sides) {
     if(!are_same(std::accumulate(weights, weights + num_sides, 0.0), 1.0)){
         throw std::invalid_argument("Invalid weighted dice state");
     }
-    uint32_t random_number = arc4random_uniform(UINT32_MAX);
+    uint32_t random_number = arc4random();
     double current_weight = 0;
     
     for (int k=0; k<num_sides; ++k) {

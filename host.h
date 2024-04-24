@@ -18,7 +18,7 @@ public:
 	void choose_clones(const double g_freqs[NUM_UNIQUE_CLONES]);
 	void choose_drugs(int generation, const double avg_fitness_data[NUM_DRUGS], const double generational_mean_fitness[NUM_GENERATIONS]);
 	void recombine();
-	void naturally_select(const double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]);
+	void naturally_select(const double clone_drug_fitness[NUM_DRUGS][NUM_UNIQUE_CLONES]);
 	void reset();
 
 	//debug

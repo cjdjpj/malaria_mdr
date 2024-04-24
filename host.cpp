@@ -63,22 +63,22 @@ void Host::choose_drugs(int generation, const double clone_drug_avg_fitness[NUM_
 }
 
 
-void Host::naturally_select(const double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]){
+void Host::naturally_select(const double clone_drug_fitness[NUM_DRUGS][NUM_UNIQUE_CLONES]){
 	mean_fitness = 0.0;
 	if(!moi){
 		return;
 	}
 	for(const uint8_t& c: i_clones){
-		mean_fitness += clone_drug_fitness[c][host_drug] * i_freqs[c];
+		mean_fitness += clone_drug_fitness[host_drug][c] * i_freqs[c];
 	}
 	for(const uint8_t& c: i_clones){
-		i_freqs[c] = (clone_drug_fitness[c][host_drug] * i_freqs[c])/mean_fitness;
+		i_freqs[c] = clone_drug_fitness[host_drug][c] * i_freqs[c]/mean_fitness;
 	}
 }
 
 
 void Host::recombine(){
-	if(!weighted_flip(RECOMBINATION_RATE) || !moi){
+	if(id > NUM_HOSTS * RECOMBINATION_RATE || !moi){
 		return;
 	}
     double new_freqs[NUM_UNIQUE_CLONES]{};

@@ -5,32 +5,32 @@
 #include "simulator.h"
 
 #include <vector>
+#include <numeric>
 #include <iostream>
 
-void sim_main(int data_over_runs[], int sim_run){
+int sim_main(int sim_run){
 	//initialize hosts
 	Host::next_id = 0;
 	std::vector<Host> host_population(NUM_HOSTS);
 
 	//read in drug-clone fitness values
-	double clone_drug_fitness[NUM_UNIQUE_CLONES][NUM_DRUGS]{};
+	double clone_drug_fitness[NUM_DRUGS][NUM_UNIQUE_CLONES]{};
 	read_csv_to_2d_array_drug("../data/fitness_values_full.csv", clone_drug_fitness);
 
 	//find avg fitness
 	double clone_drug_avg_fitness[NUM_DRUGS]{};
 	for(int i=0; i<NUM_DRUGS; i++){
-		double sum = 0.0;
-		for(int j=0; j<NUM_UNIQUE_CLONES; j++){
-			sum += clone_drug_fitness[j][i];
-		}
+		double sum = std::accumulate(clone_drug_fitness[i], clone_drug_fitness[i] + NUM_UNIQUE_CLONES, 0.0);
 		clone_drug_avg_fitness[i] = sum/NUM_UNIQUE_CLONES;
 	}
 
-	//global clone data collection
+	//containers for results
 	double generational_poisson_mean[NUM_GENERATIONS]{};
 	double generational_g_freqs[NUM_GENERATIONS][NUM_UNIQUE_CLONES]{};
 	double generational_mean_fitness[NUM_GENERATIONS]{};
 	std::set<uint8_t> g_clones{};
+
+	int multi_run_return_val = -1;
 
 	//SETTING: initial conditions
 	generational_poisson_mean[0] = STARTING_POISSON_MEAN;
@@ -161,18 +161,16 @@ void sim_main(int data_over_runs[], int sim_run){
 	write_2d_array_to_csv("../data/g_freqs.csv", gen, generational_g_freqs);
 	write_array_to_csv("../data/mean_fitness.csv", gen, generational_mean_fitness);
 	write_array_to_csv("../data/poisson_mean.csv", gen, generational_poisson_mean);
+
+	return multi_run_return_val;
 }
 
+static int sim_run = 0;
+
 int main(){
-	int data_over_runs[NUM_RUNS]{};
-	for(int& d : data_over_runs){
-		d = -1;
-	}
-	int sim_run = 0;
 	while(sim_run < NUM_RUNS){
 		std::cout << "--------RUN " << sim_run+1 << "--------" << "\n";
-		sim_main(data_over_runs, sim_run);
+		append_to_csv(sim_main(sim_run), "../data/data_over_runs.csv");
 		sim_run++;
 	}
-	write_array_to_csv("../data/data_over_runs.csv", sim_run, data_over_runs);
 }

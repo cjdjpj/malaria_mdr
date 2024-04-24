@@ -3,7 +3,7 @@
 #include <sstream>
 #include "settings.h"
 
-void read_csv_to_2d_array_drug(std::string file_path, double data[NUM_UNIQUE_CLONES][NUM_DRUGS]) {
+void read_csv_to_2d_array_drug(const std::string& file_path, double data[NUM_DRUGS][NUM_UNIQUE_CLONES]) {
     std::ifstream file(file_path);
 
     std::string line;
@@ -13,7 +13,7 @@ void read_csv_to_2d_array_drug(std::string file_path, double data[NUM_UNIQUE_CLO
         std::string cell;
         int col = 0;
         while (getline(ss, cell, ',') && col < NUM_DRUGS) {
-            data[row][col++] = std::stod(cell);
+            data[col++][row] = std::stod(cell);
         }
         ++row;
     }
@@ -21,7 +21,23 @@ void read_csv_to_2d_array_drug(std::string file_path, double data[NUM_UNIQUE_CLO
 }
 
 template <class T>
-void write_2d_array_to_csv(std::string file_path, int generation, const T data[][NUM_UNIQUE_CLONES]) {
+void append_to_csv(T value, const std::string& filename){
+    static bool firstCall = true;
+    std::fstream file;
+
+    if (firstCall) {
+        file.open(filename, std::ios::out);
+        firstCall = false;
+    } else {
+        file.open(filename, std::ios::out | std::ios::app);
+    }
+
+    file << value << ",\n";
+    file.close();
+}
+
+template <class T>
+void write_2d_array_to_csv(const std::string& file_path, int generation, const T data[][NUM_UNIQUE_CLONES]) {
     std::ofstream file(file_path);
 
     for (int row=0; row<generation; row++) {
@@ -37,7 +53,7 @@ void write_2d_array_to_csv(std::string file_path, int generation, const T data[]
 }
 
 template <class T>
-void write_array_to_csv(std::string file_path, int generation, const T data[]) {
+void write_array_to_csv(const std::string& file_path, int generation, const T data[]) {
     std::ofstream file(file_path);
 
     for (int row = 0; row < generation; row++) {
