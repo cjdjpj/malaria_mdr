@@ -7,12 +7,12 @@ int weighted_dice_roll(const double weights[], int num_sides) {
            throw std::invalid_argument("Number of sides must > 0");
     }
     // Use arc4random_uniform to generate a random number
-    uint32_t random_number = arc4random();
+    uint32_t random_number = arc4random_uniform(UINT32_MAX - 1);
     double current_weight = 0;
     
     for (int k=0; k<num_sides; ++k) {
         current_weight += weights[k];
-        if (random_number <= current_weight * UINT32_MAX) {
+        if (random_number < current_weight * UINT32_MAX) {
             return k; 
         }
     }
