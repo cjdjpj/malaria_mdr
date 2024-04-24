@@ -4,10 +4,12 @@
 
 int weighted_dice_roll(const double weights[], int num_sides) {
     if (num_sides <= 0) {
-           throw std::invalid_argument("Number of sides must > 0");
+        throw std::invalid_argument("Number of sides must > 0");
     }
-    // Use arc4random_uniform to generate a random number
-    uint32_t random_number = arc4random_uniform(UINT32_MAX - 1);
+    if(!are_same(std::accumulate(weights, weights + num_sides, 0.0), 1.0)){
+        throw std::invalid_argument("Invalid weighted dice state");
+    }
+    uint32_t random_number = arc4random_uniform(UINT32_MAX);
     double current_weight = 0;
     
     for (int k=0; k<num_sides; ++k) {
@@ -16,9 +18,7 @@ int weighted_dice_roll(const double weights[], int num_sides) {
             return k; 
         }
     }
-    // This should not happen unless there's an issue with the weights.
-    std::cout << "current_weight: " << current_weight << std::endl;
-    throw std::logic_error("Invalid weighted dice state.");
+    return num_sides-1;
 }
 
 bool weighted_flip(double prob){
