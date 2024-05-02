@@ -20,25 +20,20 @@ data['AL double-resistant'] = data.iloc[:, al_double_resistant].sum(axis=1)
 print(data[['DHA-PPQ, AQ triple-resistant', 'DHA-PPQ, LUM triple-resistant',
             'DHA-PPQ double-resistant', 'ASAQ double-resistant', 'AL double-resistant']])
 
+threshold = 0.01
+mask = data['DHA-PPQ, AQ triple-resistant'] >= threshold
+if mask.any():
+    first_occurrence = mask.idxmax()
+    print(f"DHA-PPQ + AQ Trip resistance T.01: {first_occurrence}")
+
 # settings
 plt.style.use('ggplot')
 plt.rcParams['savefig.dpi'] = 300
 plt.figure(figsize=(10, 10))
 
-# CYCLING
-# drug1_gen = 0
-# drug2_gen = 25
-# drug3_gen = 48
-# plt.axvline(x=drug1_gen, color='grey', linestyle='--')
-# plt.text(drug1_gen+0.5, 0.95, 'CQ', rotation=0, color='grey')
-# plt.axvline(x=drug2_gen, color='grey', linestyle='--')
-# plt.text(drug2_gen+0.5, 0.95, 'LM', rotation=0, color='grey')
-# plt.axvline(x=drug3_gen, color='grey', linestyle='--')
-# plt.text(drug3_gen+0.5, 0.95, 'ASAQ', rotation=0, color='grey')
-
 # plot data
-plt.plot(data.index, data['DHA-PPQ, AQ triple-resistant'], label='DHA-PPQ, AQ triple-resistant')
-plt.plot(data.index, data['DHA-PPQ, LUM triple-resistant'], label='DHA-PPQ, LUM triple-resistant')
+plt.plot(data.index, data['DHA-PPQ, AQ triple-resistant'], label='DHA-PPQ, AQ triple-resistant', linewidth=3)
+plt.plot(data.index, data['DHA-PPQ, LUM triple-resistant'], label='DHA-PPQ, LUM triple-resistant', linewidth=3)
 plt.plot(data.index, data['DHA-PPQ double-resistant'], label='DHA-PPQ double-resistant')
 plt.plot(data.index, data['ASAQ double-resistant'], label='ASAQ double-resistant')
 plt.plot(data.index, data['AL double-resistant'], label='AL double-resistant')
