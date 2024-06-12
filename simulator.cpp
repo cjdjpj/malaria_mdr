@@ -2,13 +2,18 @@
 #include "utils.h"
 #include "settings.h"
 #include "host.h"
-#include "simulator.h"
 
+#include <random>
 #include <vector>
 #include <numeric>
 #include <iostream>
 
 int sim_main(int sim_run){
+    //initialize rng
+    std::random_device rd; // uniformly-distributed integer random number generator
+    std::mt19937 rng (rd ()); // mt19937: Pseudo-random number generation
+    std::poisson_distribution<> poisson_generator;
+
 	//initialize hosts
 	Host::next_id = 0;
 	std::vector<Host> host_population(NUM_HOSTS);
