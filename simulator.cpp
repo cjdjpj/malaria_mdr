@@ -1,5 +1,4 @@
 #include "file_readwrite.h"
-#include "utils.h"
 #include "settings.h"
 #include "host.h"
 
@@ -112,7 +111,7 @@ int sim_main(int sim_run){
 		}
 
 		//find new poisson mean
-		generational_poisson_mean[gen] = R_NAUGHT * generational_mean_fitness[gen] * (1-(num_infected/NUM_HOSTS));
+		generational_poisson_mean[gen] = R_NAUGHT * generational_mean_fitness[gen] * (1-((float)num_infected/NUM_HOSTS));
 
 		#ifdef TERMINATE_WHEN_ENDEMIC_OR_ELIMINATED
 		if(generational_poisson_mean[gen] == 0.0 || generational_poisson_mean[gen] > 4.7){ //99% prevalence (3 for 95%)

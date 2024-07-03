@@ -1,4 +1,6 @@
 #pragma once
+#include "settings.h"
+
 #include <set>
 
 class Host{
