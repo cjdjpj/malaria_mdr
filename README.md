@@ -60,6 +60,6 @@ $$f_{\text{mutant}}' = 10^{-6} \times f_{\text{parent}}$$
 and the original parent clone has new frequency:
 $$f_{\text{parent}}' = f_{\text{parent}} - f_{\text{parent}} \times 10^{-6} \times \text{num mutants}$$
 ### Where are parameters changed?
-1. In `fitness_values_full.csv`: fitness of wild-type clones must be updated to match transmission cycle length
+1. In `fitness_values.csv`: fitness of wild-type clones must be updated to match transmission cycle length
 2. In `simulator.cpp`: starting clones and starting clones frequencies
 3. In `settings.h`: everything else

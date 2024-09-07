@@ -1,12 +1,16 @@
+import os
 import csv
 
-file_path = '../g_freqs.csv'
+g_freqs_path = "../g_freqs.csv"
 
-with open(file_path, newline='') as csvfile:
+dirname = os.path.dirname(os.path.abspath(__file__))
+g_freqs_path = os.path.join(dirname, g_freqs_path)
+
+with open(g_freqs_path, newline="") as csvfile:
     reader = csv.reader(csvfile)
-    data = list(reader)
+    df = list(reader)
 
-last_row = data[-1]
+last_row = df[-1]
 
 print("Surviving clones (at last gen):")
 for clone_num, frequency in enumerate(last_row):

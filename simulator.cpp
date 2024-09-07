@@ -19,7 +19,7 @@ int sim_main(int sim_run){
 
 	//read in drug-clone fitness values
 	double clone_drug_fitness[NUM_DRUGS][NUM_UNIQUE_CLONES]{};
-	read_csv_to_2d_array_drug("../data/fitness_values_full.csv", clone_drug_fitness);
+	read_csv_to_2d_array_drug("../data/fitness_values.csv", clone_drug_fitness);
 
 	//find avg fitness
 	double clone_drug_avg_fitness[NUM_DRUGS]{};
