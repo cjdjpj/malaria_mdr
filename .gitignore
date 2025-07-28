@@ -1,4 +1,4 @@
-/.DS_Store
+.DS_Store
 build/*
 g_freqs.csv
 poisson_mean.csv
