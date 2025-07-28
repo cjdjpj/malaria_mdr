@@ -1,4 +1,4 @@
-# malaria_recomb_MDR
+# malaria_MDR
 A stochastic, Wright-Fischer-based model, built with C++.
 
 Investigating the effect of recombination on the rate of emergence of multi-drug resistance under different treatment strategies (single treatment, cycling treatment, and multiple firstline therapies (MFTs) in Malaria.
