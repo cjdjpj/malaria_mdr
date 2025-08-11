@@ -23,6 +23,13 @@ make
 2. In `simulator.cpp`: starting clones and starting clone frequencies
 3. In `settings.h`: everything else (demography, genetics map, recombination, treatment)
 
+### Example runs
+
+| | Frequency of each clone per generation | Disease prevalence per generation | Frequency of resistant clones per generation |
+| - | - | - | - |
+| **Cycling** | ![cycling1](figures/cycling1.png)  | ![cycling2](figures/cycling2.png)  | ![cycling3](figures/cycling3.png) |
+| **Multiple Firstline Therapies (MFTs)**| ![mft1](figures/mft1.png)  | ![mft2](figures/mft2.png) |  ![mft3](figures/mft3.png) |
+
 ## Model architecture
 
 Assumes a pool of Malaria clones and a population of exchangeable hosts. It is stochastic and iterates discrete time steps equivalent to one Malaria generation/transmission cycle, which is approximately 28 days in high transmission regions.
